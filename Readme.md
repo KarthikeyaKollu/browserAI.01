@@ -70,7 +70,7 @@ The extension communicates with a local Ollama instance via the following endpoi
 # Installing Ollama
 
 If you encounter any errors, ensure that Ollama is installed. Follow these steps to install Ollama and pull the necessary models:
-
+![Commom=n Error](https://dummyurl.com/email-component-demo.gif)
 ### Installation Steps
 
 1. **Download Ollama**
@@ -95,7 +95,7 @@ If you encounter any errors, ensure that Ollama is installed. Follow these steps
 ### Example Commands
 - Pulling a language model:
   ```bash
-  ollama pull ollama/llm
+  ollama pull gemma:7b
 ## Contributing
 Contributions are welcome! Please open an issue or submit a pull request for any improvements or suggestions.
 
