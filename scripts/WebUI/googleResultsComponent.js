@@ -52,10 +52,10 @@ async function googleSearchComponent() {
   
               <div class="flex justify-around relative">
                  
-                  <button class="border border-blue-700 text-white py-2 px-4 rounded-lg" id="startChat">Ask a followup</button>
-                  <button class="bg-gray-700 text-white py-2 px-4 rounded-lg" id="startChat">Start New Chat</button>
+                  <button class="border border-blue-700 text-white py-2 px-4 rounded-lg hover:bg-blue-400 " id="startChat">Ask a followup</button>
+                  <button class="bg-gray-700 text-white py-2 px-4 rounded-lg hover:bg-gray-900" id="startChat">Start New Chat</button>
                    <img src="https://img.icons8.com/color/48/stop.png" id="stop-button" class=" text-white   animate-spin cursor-pointer px-2 absolute -right-3 -top-16 "/>
-                  <img src="https://img.icons8.com/?size=100&id=13906&format=png&color=000000" id="reload-button" class=" text-white  cursor-pointer px-2 absolute right-3 -top-16 hover:bg-slate-600  rounded-lg hidden " width="50px" />
+                  <img src="https://img.icons8.com/?size=100&id=13906&format=png&color=000000" id="reload-button" class=" text-white  cursor-pointer px-2 absolute right-3 -top-16 hover:bg-slate-700  rounded-lg hidden " width="50px" />
   
               </div>
               <div class="mt-4 text-center">
@@ -333,10 +333,11 @@ function showAlert(message) {
  * and sends it as a message of type 'FOLLOWUP'.
  */
 document.querySelectorAll("#startChat").forEach((btn) => {
-  btn.addEventListener('click', () => {
+  btn.addEventListener('click',async  () => {
     // Send message to open the side panel
     chrome.runtime.sendMessage({ action: 'openSidePanel' });
     console.log("command sent to open panel");
+    await delay(1000)
 
     // Check if button text does not include 'New'/ StartNewchat
     if (!btn.textContent.includes('New')) {

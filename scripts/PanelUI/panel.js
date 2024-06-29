@@ -70,8 +70,8 @@ async function postRequest(data) {
     });
 
     if (!response.ok) {
-      const errorData = await response.json(); // Or response.text() if not JSON
-      document.getElementById('chatlog').innerHTML += `API returned an error: ${errorData.message}`;
+      const errorData = await response.json(); // Or response.text
+      showAlert(`API returned an error: ${errorData.message}`)
      
     }
 
@@ -139,7 +139,9 @@ function updateModelInQueryString(model) {
     const newPathWithQuery = `${window.location.pathname}?${searchParams.toString()}`
     window.history.replaceState(null, '', newPathWithQuery);
   }
-
+  chrome.storage.local.set({ 'model': model}, () => {
+    console.log('Model updated manually to ' + model);
+  });
 
 
   MODEL_ID = model;
@@ -159,7 +161,9 @@ async function populateModels() {
 
 
     // set up handler for selection
-    selectElement.onchange = (() =>updateModelInQueryString(selectElement.value));
+    selectElement.onchange = (() =>{
+      updateModelInQueryString(selectElement.value)
+    });
 
     data.models.forEach((model) => {
       const option = document.createElement('option');
@@ -170,14 +174,14 @@ async function populateModels() {
 
     
 
- // In popup.js
-chrome.storage.local.set({ 'model': selectElement.value }, function() {
-  if (chrome.runtime.lastError) {
-    console.error('Error setting model: ' + chrome.runtime.lastError.message);
-  } else {
-    console.log('Model updated manually to ' + selectElement.value);
-  }
-});
+//  // In popup.js
+// chrome.storage.local.set({ 'model': selectElement.value }, function() {
+//   if (chrome.runtime.lastError) {
+//     console.error('Error setting model: ' + chrome.runtime.lastError.message);
+//   } else {
+//     console.log('Model updated manually to ' + selectElement.value);
+//   }
+// });
 
 
 
@@ -226,7 +230,14 @@ const context_prompt = document.getElementById('context-prompt')
 const submitButton = document.getElementById('submit');
 const closeButton = document.getElementById('close');
 const addContextButton = document.querySelector('.input-context-button');
-
+async function getModelFromStorage() {
+  return new Promise((resolve, reject) => {
+    chrome.storage.local.get('model', function(result) {
+      const selectedModel = result.model ? result.model.trim() : '';
+      resolve(selectedModel);
+    });
+  });
+}
 // Function to handle user input and call the API functions
 async function submitRequest() {
   const input = promptInput.value;
@@ -249,9 +260,7 @@ async function submitRequest() {
 
   const basicPrompt = buildPrompt(contextInput, input);
 console.log(selectedModel)
-  chrome.storage.local.set({ 'model': selectedModel}, () => {
-    console.log('Model updated manually to ' + model);
-  });
+
 
   updateChatlog(chatlog, contextInput, input);
   const chatResponse = createChatResponseElement(chatlog);
@@ -275,7 +284,13 @@ console.log(selectedModel)
   promptInput.value = '';
   context_prompt.value = '';
 
-  const data = { model: selectedModel, prompt: basicPrompt, context: chatlog.context };
+ const Model = await getModelFromStorage()
+if(!Model){
+  Model = selectedModel
+}
+
+  const data = { model: Model, prompt: basicPrompt, context: chatlog.context };
+  
 
   try {
     const response = await postRequest(data);
@@ -373,7 +388,7 @@ async function processResponse(response, chatlog, chatResponse, loading) {
     }
 
     if (word !== undefined) {
-      chatResponse.innerHTML += word.replace(/[*`]/g, '');
+      chatResponse.innerHTML += word.replace(/[*`#]/g, '');
       data_p += word;
     }
     loading.classList.add('hidden');
@@ -558,11 +573,11 @@ chrome.storage.onChanged.addListener(function (changes, namespace) {
 function applyTheme(theme) {
   var themeStyle = document.getElementById('theme');
   if (theme == 'retro') {
-    themeStyle.href = 'retro.css';
+    themeStyle.href = 'css/retro.css';
   } else if (theme == 'dark') {
-    themeStyle.href = 'dark.css';
+    themeStyle.href = 'css/dark.css';
   } else {
-    themeStyle.href = 'light.css';
+    themeStyle.href = 'css/light.css';
   }
 }
 

@@ -537,11 +537,11 @@ chrome.storage.onChanged.addListener(function (changes, namespace) {
 function applyTheme(theme) {
   var themeStyle = document.getElementById('theme');
   if (theme == 'retro') {
-    themeStyle.href = 'retro.css';
-  } else if (theme == 'dark') {
-    themeStyle.href = 'dark.css';
+    themeStyle.href = 'css/retro.css';
+  } else if (theme == 'css/dark') {
+    themeStyle.href = 'css/dark.css';
   } else {
-    themeStyle.href = 'light.css';
+    themeStyle.href = 'css/light.css';
   }
 }
 
