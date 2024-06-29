@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>open-os Options</title>
+    <link href="https://fonts.googleapis.com/css?family=Montserrat%3A400%2C700%7CBitter%3A400%2C700&display=swap" rel="stylesheet">
+    <style>
+
+      body {
+
+        font-family: Montserrat, Helvetica, sans-serif;
+        background-color: #f2f2f2;
+        background-image: url('logo.jpeg');
+        background-size: cover;
+      }
+      h1 {
+        text-align: center;
+        font-size: 30px;
+        font-weight: 300;
+        color: #545454;
+        margin-bottom: 30px;
+        margin-top: 10px;
+
+      }
+      label {
+        display: block;
+        margin-top: 10px;
+      }
+
+      textarea {
+        display: block;
+        margin-top: 10px;
+        width: 100%;
+        min-height: 60px;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+
+      }
+
+      input[type="text"], select {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+        margin-top: 6px;
+        margin-bottom: 16px;
+      }
+      button[type="submit"] {
+        background-color: #4CAF50;
+        color: white;
+        padding: 12px 20px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        margin-top: 16px;
+      }
+      button[type="submit"]:hover {
+        background-color: #45a049;
+      }
+
+      #options-frame {
+        width: 600px;
+        border: 2px solid #d6d6d6;
+        padding: 20px;
+        border-radius: 5px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        margin: 30px auto;
+        background-color: #f2f2f2;
+      }
+      #options-frame h3 {
+        margin-top: 0;
+      }
+
+      #about {
+        font-size: 12px;
+        margin-bottom: 30px;
+      }
+
+      table {
+        width: 80%;
+        
+        border-collapse: collapse; /* Ensures that the border lines between cells are single lines */
+        text-align: center; /* Centers text horizontally in each cell */
+    }
+
+    th, td {
+        border: 1px solid #666666; /* Adds a simple black border around each cell */
+        padding: 8px; /* Adds space between cell borders and the content inside */
+    }
+
+    th {
+        background-color: #f2f2f2; /* Light grey background for the header cells */
+        padding-top: 12px;
+        padding-bottom: 12px;
+    }
+     
+    </style>
+  </head>
+  <body>
+    <div id="options-frame">
+    <h1 id="options-title"><b>open-os</b> Extension Options</h1>
+    <div id="about">
+      <p>Small open-source extension for Chromium-based browsers like Chrome, Brave, or Edge to quickly access your favorite local AI LLM assistant while browsing.</p>
+      <p>This beta is configured for Ollama models (Llama3, Phi3, Mistral, Gemma...).</p>
+      <p>Simply click on the extension icon and start chatting with your virtual assistant. Right-click on the extension icon to open a new tab.</p>
+      <p>Extension has been developed and is maintained by <a href="https://twitter.com/luishg/" target="_blank">@luishg</a> with the help of ChatGPT and Github Copilot.</p>
+      
+      <br>
+      <strong>Make sure you have installed Ollama and it is running</strong>
+
+      <ul>
+        <li>Download Ollama: <a target="_blank" href="https://ollama.com/">https://ollama.com/</a></li>
+        <li>Install any of the available models on Ollama. For example, for LLama3 from META, simply type "ollama run llama3:8b" in your OS terminal</li>
+        <li>Llama-3 Installation video tutorial: <a target="_blank" href="https://www.youtube.com/watch?v=7ujZ1N4Pmz8">https://www.youtube.com/watch?v=7ujZ1N4Pmz8</a></li>
+      </ul>
+      
+      </br>
+      <strong>Compatible Browsers</strong>
+      <br><br>
+      <table>
+        <tr>
+          <th>Browser</th>
+          <th>Side Panel</th>
+          <th>Tab</th>
+        </tr>
+        <tr>
+          <td>Chrome</td>
+          <td>OK</td>
+          <td>OK</td>
+        </tr>
+        <tr>
+          <td>Edge</td>
+          <td>NO</td>
+          <td>OK</td>
+        </tr>
+        <tr>
+          <td>Firefox</td>
+          <td>Not tested</td>
+          <td>Not tested</td>
+        </tr>
+        <tr>
+          <td>Brave</td>
+          <td>OK</td>
+          <td>OK</td>
+        </tr>
+        <tr>
+          <td>Arc</td>
+          <td>NO</td>
+          <td>OK</td>
+        </tr>
+      </table>
+      <br><br>
+
+
+      <strong>Not getting responses? How to expose the Ollama server.</strong>
+      <p>By default, Ollama allows cross origin requests from 127.0.0.1 and 0.0.0.0.</p>
+      <p>To support more origins, you can use the <code>OLLAMA_ORIGINS</code> environment variable: <a target="_blank" href="https://github.com/ollama/ollama/blob/main/docs/faq.md">https://github.com/ollama/ollama/blob/main/docs/faq.md</a></p>
+  
+
+      <p>For more info visit <a target="_blank" href="https://www.open-os.com" target="_blank">open-os.com</a></p>
+    </br></br>
+    </div>
+    <form id="options-form">
+
+      <label for="theme-select">Theme:</label>
+      <p>Retro Teme Font: "More Perfect DOS VGA" by https://zehfernando.com/about/</p>
+      <select id="theme-select" name="theme">
+        <option value="light" selected>Light Theme</option>
+        <option value="dark">Dark Theme</option>
+        <option value="retro">Retro Terminal</option>
+      </select>
+      
+
+      <label for="api-key-input">OpenAI API_KEY (deprecated):</label>
+      <input type="text" disabled id="api-key-input" name="api_key" placeholder="Paste here your API KEY">
+      
+      <label for="ai-engine-select">LLM Model:</label>
+      <select id="ai-engine-select" name="ai_engine">
+        <option value="engine1" selected disabled>Deactivated, set up your model on the main page.</option>
+      </select>
+
+      <label for="char-select">Character (deprecated):</label>
+      <select id="char-select" disabled name="char-select">
+        <option value="helpbot" selected>Help Bot</option>
+        <option value="datemode">Date Mode</option>
+      </select>
+      <label for="ai-engine-select">Pre-prompt (you can customize this previous prompt):</label>
+
+      <textarea id="pre-prompt" disabled>Im am open-os, a help bot to solve any questiom you may have in any langguage I know.</textarea>
+      
+      <button type="submit">Save</button>
+    </form>
+    
+    <script src="scripts/options.js"></script>
+
+    </div>
+  </body>
+</html>

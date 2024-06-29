@@ -1,0 +1,121 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.glow {
+ 
+  border: 2px solid transparent; /* Start with a transparent border */
+  position: relative;
+}
+
+.glow::before {
+  content: '';
+  
+  position: absolute;
+  top: -5px;
+  left: -5px;
+  right: -5px;
+  bottom: -5px;
+  z-index: -1;
+  background: linear-gradient(45deg, #ff00ff, #00ffff, #ffff00, #ff00ff);
+ 
+  background-size: 400% 400%;
+  border-radius: 10px 10px 10px 0;
+  animation: glowing 10s linear infinite;
+}
+
+
+@keyframes glowing {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+/* .copy-button{
+
+  position:absolute;
+  top:0;
+  left: 0;
+} */
+
+
+.animated-gradient {
+  background: linear-gradient(to right, rgb(20, 31, 174), rgb(166, 188, 224), rgb(20, 31, 174), rgb(153, 156, 156));
+  background-size: 400%;
+  animation: gradient-animation infinite;
+}
+
+@keyframes gradient-animation {
+  from {
+    background-position: 100% 0%;
+  }
+  to {
+    background-position: 0% 0%;
+  }
+}
+
+.slow-animation {
+  animation-duration: 5s; /* Slow animation */
+}
+
+.medium-animation {
+  animation-duration: 3s; /* Medium animation */
+}
+
+.fast-animation {
+  animation-duration: 1s; /* Fast animation */
+}
+
+.super-fast-animation {
+  animation-duration: 0.5s; /* Super fast animation */
+}
+
+
+.hidden {
+  display: none;
+}
+.fade-in {
+  animation: fadeIn 0.3s forwards;
+}
+.fade-out {
+  animation: fadeOut 0.3s forwards;
+}
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+    transform: scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+}
+
+@keyframes bounce {
+  0%, 20%, 50%, 80%, 100% {
+    transform: translateY(0); /* Initial and final position */
+  }
+  40% {
+    transform: translateY(-10px); /* Bounce up */
+  }
+  60% {
+    transform: translateY(-5px); /* Bounce down */
+  }
+}
+
+

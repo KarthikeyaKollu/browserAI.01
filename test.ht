@@ -1,0 +1,172 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Simple Interface</title>
+  <link rel="stylesheet" href="output.css">
+  <style>
+    .hidden {
+      display: none;
+    }
+    .fade-in {
+      animation: fadeIn 0.3s forwards;
+    }
+    .fade-out {
+      animation: fadeOut 0.3s forwards;
+    }
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: scale(0.95);
+      }
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+    @keyframes fadeOut {
+      from {
+        opacity: 1;
+        transform: scale(1);
+      }
+      to {
+        opacity: 0;
+        transform: scale(0.95);
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="reply-container">
+    <div class="p-4 flex gap-4 generate-reply">
+      <span class=" bg-blue-200 p-2 px-3 rounded-lg cursor-pointer reply text-gray-600" data-prompt="Write a simple and crisp reply in less than 50 words saying yes or replying affirmatively to the other person">Rewrite</span>
+    
+      <span class="text-gray-600 bg-yellow-300 p-2 px-3 rounded-lg cursor-pointer reply" data-prompt="Write a professional reply to follow up on the points mentioned in the previous messages">Create <span class="tex-blue">✨</span></span>
+    </div>
+    <div class="p-4 create-reply hidden">
+      <span class="p-1 cursor-pointer back">←</span>
+      <input type="text" placeholder="Write with Ai" class="border border-blue-500 p-1 rounded-lg w-72 input-prompt">
+      <span class="text-white border bg-black p-2 px-3 rounded-lg cursor-pointer generate">Generate</span>
+      
+    </div>
+    <div class="loading relative">
+      
+      <div class="animated-gradient h-3 rounded-md my-3 slow-animation"></div>
+      <div class="animated-gradient h-3 rounded-md my-3 fast-animation w-[90%]"></div>
+      
+    </div>
+  
+  </div>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const generateReply = document.querySelector(".generate-reply");
+      const createReply = document.querySelector(".create-reply");
+      const replies = document.querySelectorAll(".reply");
+      const input = document.querySelector(".input-prompt");
+      const generate = document.querySelector(".generate");
+      const loading = document.querySelector(".loading");
+      const back = document.querySelector(".back");
+
+      let prompt = '';
+
+      replies.forEach(btn => {
+        btn.addEventListener('click', () => {
+          prompt = btn.dataset.prompt;
+          if (btn.textContent.includes("Create")) {
+            generateReply.classList.add('fade-out');
+            
+            setTimeout(() => {
+              generateReply.classList.add('hidden');
+              generateReply.classList.remove('fade-out');
+              createReply.classList.remove('hidden');
+              createReply.classList.add('fade-in');
+              
+            }, 500);
+          } else {
+            loading.classList.remove('hidden');
+            console.log(prompt);
+          }
+        });
+      });
+
+      generate.addEventListener('click', () => {
+        console.log(input.value);
+        loading.classList.remove('hidden');
+      });
+
+      back.addEventListener('click', () => {
+        createReply.classList.add('fade-out');
+        loading.classList.add('hidden')
+        setTimeout(() => {
+          createReply.classList.add('hidden');
+          createReply.classList.remove('fade-out');
+          generateReply.classList.remove('hidden');
+          generateReply.classList.add('fade-in');
+        }, 500);
+      });
+    });
+  </script>
+</body>
+</html>
+
+ -->
+ <!DOCTYPE html>
+ <html>
+ <head>
+     <title>Chat OpenAI</title>
+     <link rel="stylesheet" id="theme" href="light.css">
+     <script src="lib/marked.min.js" integrity="sha384-dZulhREgb+hCgQMhZ2VG0l37VQj5pJBq2w0h7Jn3tdMn36aXNepF1+FMLBB4O649" crossorigin="anonymous"></script>
+     <script src="scripts/prism.js"></script>
+     <link href="css/prism.css" rel="stylesheet">
+     <link href="output.css" rel="stylesheet">
+ </head>
+ <body class="bg-[#212121] flex flex-col" style="height:100vh;">
+     <div class="w-full flex items-center p-4 bg-[#171717] border-b border-[#212121] fixed top-0" style="z-index: 9999;">
+         <span id="settings" class="mx-auto text-white">NOT INITIALIZED</span>
+         <span class="relative flex h-3 w-3 mr-2">
+             <span id="status" class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-500 opacity-75"></span>
+             <span id="status1" class="relative inline-flex rounded-full h-3 w-3 bg-red-500 "></span>
+         </span>
+         <select class="form-select p-2 border border-gray-300 rounded focus:outline-none" id="model-select">
+         </select>
+     </div>
+     <!-- chat log -->
+     <div id="chatlog" class="flex-grow overflow-auto p-4 pt-16  items-center justify-center flex">
+      <img src="https://img.icons8.com/?size=100&id=g8ltXTwIfJ1n&format=png&color=000000" class="border bg-black  px-3 p-2 rounded-lg cursor-pointer generate" width="50px" height="50px"/>
+    
+         <div class="flex flex-col space-y-6 items-start">
+             <!-- Coding Icon -->
+             <div class="p-3 bg-[#8A2BE2] border border-gray-600 rounded-lg shadow-lg cursor-pointer w-44">
+                 <img src="https://img.icons8.com/fluency/48/000000/source-code.png" alt="Coding icon" class="w-6 h-6 mr-0">
+                 <div class="text-slate-300 font-semibold pt-2">Explain how to write a Python function.</div>
+             </div>
+             <!-- Email Icon -->
+             <div class="p-3 bg-[#FFD700] border border-gray-600 rounded-lg shadow-lg cursor-pointer w-44">
+                 <img src="https://img.icons8.com/fluency/48/000000/email.png" alt="Email icon" class="w-6 h-6 mr-0">
+                 <div class="text-slate-300 font-semibold pt-2">Draft a professional email for a job application.</div>
+             </div>
+             <!-- Search Icon -->
+             <div class="p-3 bg-[#212121] border border-gray-600 rounded-lg shadow-lg cursor-pointer w-44">
+                 <img src="https://img.icons8.com/fluency/48/000000/search.png" alt="Search icon" class="w-6 h-6 mr-0">
+                 <div class="text-slate-300 font-semibold pt-2">Provide tips for effective web searches.</div>
+             </div>
+         </div>
+         <img src="https://img.icons8.com/color/48/stop.png" id="stop-button" class=" text-white  cursor-pointer px-2  right-0 -top-10 animate-spin"/>
+         <img src="https://img.icons8.com/?size=100&id=13906&format=png&color=000000" id="reload-button" class=" text-white  cursor-pointer px-2 -right-3 -top-16 hover:bg-slate-600 rounded-lg" width="50px"/>
+     </div>
+     <!-- Inputs -->
+    <div class="w-full">
+     <div class="w-[80%] mx-auto m-4  p-3 bg-[#2f2f2f] border-t border-[#2f2f2f] rounded-lg">
+       <span id="close" class="text-lg absolute top-3 right-10 hover:text-red-600 text-white cursor-pointer hidden">&times;</span>
+       <textarea id="context-prompt" type="text" class="w-full h-10 p-2 rounded-md bg-[#171717] text-white resize-none  outline-none min-h-40 max-h-40 text-md hidden"></textarea>
+       <textarea type="text" id="prompt" placeholder="Ask a follow-up" class="w-full flex-grow bg-[#2f2f2f] mr-3 resize-none outline-none text-white text-lg pt-2"></textarea>
+       <div class="flex justify-end">
+           <span class="text-white bg-blue-500 p-1 rounded-lg hover:bg-blue-700 hover:text-slate-500 cursor-pointer" id="submit">&#x23CE; Enter</span>
+       </div>
+   </div>
+    </div>
+     <script src="scripts/open-os.js"></script>
+ </body>
+ </html>
+ 
