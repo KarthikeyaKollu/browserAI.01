@@ -67,6 +67,35 @@ The extension communicates with a local Ollama instance via the following endpoi
 2. Start chatting with Ollama LLMs or engage with the current website content.
 3. Use the provided suggestions or prompts for quick interactions.
 
+# Installing Ollama
+
+If you encounter any errors, ensure that Ollama is installed. Follow these steps to install Ollama and pull the necessary models:
+
+### Installation Steps
+
+1. **Download Ollama**
+   - Visit the [official Ollama website](https://ollama.com/download) to download the latest version for your operating system.
+
+2. **Install Ollama**
+   - Follow the installation instructions specific to your OS (Windows, macOS, or Linux).
+
+3. **Verify Installation**
+   - Open your terminal and run the following command to verify that Ollama is installed:
+     ```bash
+     ollama --version
+     ```
+
+4. **Pull Models**
+   - Once Ollama is installed, you can pull the required models by running:
+     ```bash
+     ollama pull <model-name>
+     ```
+   - Replace `<model-name>` with the specific model you need (e.g., `ollama/llm`).
+
+### Example Commands
+- Pulling a language model:
+  ```bash
+  ollama pull ollama/llm
 ## Contributing
 Contributions are welcome! Please open an issue or submit a pull request for any improvements or suggestions.
 
