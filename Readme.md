@@ -1,7 +1,7 @@
-# 🌐 BrowserAI (Ollama WebUI)
+# 🌐 Orian (Ollama WebUI)
 
 ## Overview
-**BrowserAI** (Ollama WebUI) is a Chrome extension that provides quick access to your favorite local Language Model (LLM) directly from your browser. With features like open-source chat integration, mail reply suggestions, and more, it's designed to enhance your browsing experience with AI capabilities.
+**Orian** (Ollama WebUI) is a Chrome extension that provides quick access to your favorite local Language Model (LLM) directly from your browser. With features like open-source chat integration, mail reply suggestions, and more, it's designed to enhance your browsing experience with AI capabilities.
 
 [Chat Interface Overview](https://github.com/KarthikeyaKollu/browserAI.01/assets/108949445/d62073b4-cdde-46dd-8b14-8ba0c46206db)
 
@@ -100,7 +100,7 @@ If you encounter any errors like the one above, ensure that Ollama is installed.
   ```bash
   ollama pull gemma:7b
 
-# Contributing to BrowserAI (Ollama WebUI) 🚀
+# Contributing to Orian (Ollama WebUI) 🚀
 
 Thank you for considering contributing to BrowserAI (Ollama WebUI)! Your help is greatly appreciated. Here are some guidelines to get you started.
 
@@ -131,8 +131,8 @@ You can contribute in several ways:
 2. **Clone Your Fork**
    - Open your terminal and run the following command to clone the forked repository:
      ```bash
-     git clone https://github.com/<your-username>/browserAI.01.git
-     cd browserAI.01
+     git clone https://github.com/<your-username>/orian.git
+     cd orian
      ```
 
 3. **Create a Branch**
@@ -153,16 +153,25 @@ You can contribute in several ways:
 ## Folder Structure
 Here is an overview of the project folder structure:
 
-![Folder Structure](https://link.to.your.image/folder-structure.png)
+![Folder Structure](https://github.com/KarthikeyaKollu/browserAI.01/assets/108949445/aaba2bb9-a7cd-4f58-9e7e-9bf8bb13f6dd)
 
-- **src/**: Contains the source code of the extension.
-  - **components/**: React components.
-  - **utils/**: Utility functions.
-  - **styles/**: CSS and style-related files.
-  - **assets/**: Images and other static assets.
-- **public/**: Public files such as the manifest file.
-- **scripts/**: Scripts for building and deploying the extension.
-- **tests/**: Test files for the project.
+- **Orian/**: Contains the source code of the extension.
+  - **Scripts/**:
+    - **Background/**:
+      - `background.js`
+      - `models.js`
+    - **WebUI/**:
+      - `emailComponent.js`
+      - `googleComponent.js`
+      - `selection.js`
+    - **PanelUI/**:
+      - `panel.js`
+      - `options.js`
+  - **css/**: 
+    - `output.css`
+  - `panel.html`
+  - `manifest.json`
+  - `package.json`
 
 ## Pull Request Process
 1. **Commit Your Changes**
