@@ -3,7 +3,8 @@
 ## Overview
 BrowserAI (Ollama WebUI) is a Chrome extension that provides quick access to your favorite local Language Model (LLM) directly from your browser. With features like open-source chat integration, mail reply suggestions, and more, it's designed to enhance your browsing experience with AI capabilities.
 
-  ![Chat Interface Overview](  ![Chat Interface Overview]([https://dummyurl.com/chat-interface-overview.png](https://github.com/KarthikeyaKollu/browserAI.01/assets/108949445/ad146fd3-48ca-4c3d-b0f2-79fe99f5f201))))
+[Chat Interface Overview](https://github.com/KarthikeyaKollu/browserAI.01/assets/108949445/59112bd5-07db-4425-a968-e4e289c17524)
+
 ## Features
 - **Open Side Panel:** Access your LLM with a side panel using `Ctrl+Shift+Left` (or `Command+Shift+Left` on macOS).
 - **Contextual Interaction:** Select and interact with parts of websites for enhanced browsing.
@@ -24,25 +25,31 @@ The Chat Interface is a key feature of BrowserAI, enabling seamless interaction 
 - **Chat Window:** Easily accessible through the side panel.
 - **Interactive Suggestions:** Get real-time responses and suggestions based on the context of the webpage.
 
-### Images and Videos
+### Images UI
 - **Chat Interface Overview**
-  ![Chat Interface Overview]([https://dummyurl.com/chat-interface-overview.png](https://github.com/KarthikeyaKollu/browserAI.01/assets/108949445/ad146fd3-48ca-4c3d-b0f2-79fe99f5f201))
+  [Chat Interface Overview1]()
 
-- **Ollama LLMs Interaction**
-  ![Ollama Interaction Demo](https://dummyurl.com/ollama-interaction-demo.gif)
 
-- **Contextual Website Chat**
-  ![Contextual Chat Demo](https://dummyurl.com/contextual-chat-demo.gif)
 
 ## Content Scripts
 - **Selection.js:** Runs on all websites to enable selection and interaction.
-  ![Selection.js Demo](https://dummyurl.com/selection-demo.gif)
+    [Chat Interface Overview](https://github.com/KarthikeyaKollu/browserAI.01/assets/108949445/6e137498-c9ef-48be-a356-691fa6f1fb01)
+
 
 - **GoogleResultsComponent.js:** Enhances Google search results.
-  ![GoogleResultsComponent.js Demo](https://dummyurl.com/google-results-demo.gif)
+    [Chat Interface Overview](https://github.com/KarthikeyaKollu/browserAI.01/assets/108949445/8c68e833-d9a9-4fca-b063-45ab2121482e)
+
 
 - **EmailComponent.js:** Adds AI capabilities to Gmail.
-  ![EmailComponent.js Demo](https://dummyurl.com/email-component-demo.gif)
+  
+  [Chat Interface Overview](https://github.com/KarthikeyaKollu/browserAI.01/assets/108949445/0eaf06b6-a2ae-4b18-9f7c-27d7a95309c5)
+
+
+  [Chat Interface Overview](https://github.com/KarthikeyaKollu/browserAI.01/assets/108949445/717713bc-7169-48d5-b63b-4c8f8a2395bc)
+
+
+
+
 
 ## Installation
 1. Clone or download the repository.
