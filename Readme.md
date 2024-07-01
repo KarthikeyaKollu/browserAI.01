@@ -1,6 +1,6 @@
 # 🌐 Orian (Ollama WebUI)
 
-## Overview
+## Overview 🔍📊🗂️📋
 **Orian** (Ollama WebUI) is a Chrome extension that provides quick access to your favorite local Language Model (LLM) directly from your browser. With features like open-source chat integration, mail reply suggestions, and more, it's designed to enhance your browsing experience with AI capabilities.
 
 [Chat Interface Overview](https://github.com/KarthikeyaKollu/browserAI.01/assets/108949445/d62073b4-cdde-46dd-8b14-8ba0c46206db)
@@ -26,20 +26,20 @@ The Chat Interface is a key feature of Orian, enabling seamless interaction with
 - **Interactive Suggestions:** Get real-time responses and suggestions based on the context of the webpage.
 
 ## 🔍 Search Component
-- **Summarized Search Results:** Provides concise summaries of search results, aiding quick information retrieval and enhancing browsing efficiency.
+- **Summarized Search Results:**  🔍📋🔎📈✨  Provides concise summaries of search results, aiding quick information retrieval and enhancing browsing efficiency.
 
   [Search Component Overview](https://github.com/KarthikeyaKollu/browserAI.01/assets/108949445/f9389e15-bcbf-4d7e-82bf-75915551b0f4)
 
 ## 📧 Email Component
-- **Reading and Replying to Emails:** The extension reads email content and generates replies using AI suggestions, enhancing response efficiency in Gmail.
+- **Reading and Replying to Emails:** 📧👀✉️💬 The extension reads email content and generates replies using AI suggestions, enhancing response efficiency in Gmail.
   
     [Composing and Rewriting Emails](https://github.com/KarthikeyaKollu/browserAI.01/assets/108949445/717713bc-7169-48d5-b63b-4c8f8a2395bc)
 
-- **Composing and Rewriting Emails:** Users can compose new emails with AI prompts or rewrite existing messages, ensuring clarity and saving drafting time.
+- **Composing and Rewriting Emails:** 📧📝🔄  Users can compose new emails with AI prompts or rewrite existing messages, ensuring clarity and saving drafting time.
  
     [Email Component Overview](https://github.com/KarthikeyaKollu/browserAI.01/assets/108949445/0eaf06b6-a2ae-4b18-9f7c-27d7a95309c5)
 
-- **Personalized Chat Interaction:** Engage in personalized conversations within mail, tailoring responses to specific needs and improving communication effectiveness.
+- **Personalized Chat Interaction:** 🤖✨👤  Engage in personalized conversations within mail, tailoring responses to specific needs and improving communication effectiveness.
 
   [Personalized Chat Interaction](https://github.com/KarthikeyaKollu/browserAI.01/assets/108949445/bd01d55a-75fc-412b-8e71-54c1fff71e03)
 
