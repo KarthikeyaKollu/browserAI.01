@@ -3,7 +3,9 @@
 ## Overview
 BrowserAI (Ollama WebUI) is a Chrome extension that provides quick access to your favorite local Language Model (LLM) directly from your browser. With features like open-source chat integration, mail reply suggestions, and more, it's designed to enhance your browsing experience with AI capabilities.
 
+
 [Chat Interface Overview](https://github.com/KarthikeyaKollu/browserAI.01/assets/108949445/59112bd5-07db-4425-a968-e4e289c17524)
+
 
 ## Features
 - **Open Side Panel:** Access your LLM with a side panel using `Ctrl+Shift+Left` (or `Command+Shift+Left` on macOS).
@@ -28,22 +30,28 @@ The Chat Interface is a key feature of BrowserAI, enabling seamless interaction 
 
 
 
-## More AI Features
+## Search Component 🚀 🚀
 
-- **GoogleResultsComponent.js:** Enhances Google search results.
-    [Chat Interface Overview](https://github.com/KarthikeyaKollu/browserAI.01/assets/108949445/f9389e15-bcbf-4d7e-82bf-75915551b0f4)
+-  **Summarized Search Results:**
+   Provides concise summaries of search results, aiding quick information retrieval and enhancing browsing efficiency.
+   
+   [Chat Interface Overview](https://github.com/KarthikeyaKollu/browserAI.01/assets/108949445/f9389e15-bcbf-4d7e-82bf-75915551b0f4)
 
-
-- **EmailComponent.js:** Adds AI capabilities to Gmail.
+## Email Component 🚀 🚀 
+- **Reading and Replying to Emails:**
+  The extension reads email content and generates replies using AI suggestions, enhancing response efficiency in Gmail.
   
   [Chat Interface Overview](https://github.com/KarthikeyaKollu/browserAI.01/assets/108949445/0eaf06b6-a2ae-4b18-9f7c-27d7a95309c5)
 
-
+- **Composing and Rewriting Emails:**
+  Users can compose new emails with AI prompts or rewrite existing messages, ensuring clarity and saving drafting time.
+  
   [Chat Interface Overview](https://github.com/KarthikeyaKollu/browserAI.01/assets/108949445/717713bc-7169-48d5-b63b-4c8f8a2395bc)
+
+- **Personalized Chat Interaction:**
+  Engage in personalized conversations within mail, tailoring responses to specific needs and improving communication effectiveness.
   
   [Chat Interface Overview](https://github.com/KarthikeyaKollu/browserAI.01/assets/108949445/d5ae4288-01e4-4def-becd-9f43a9dd51d9)
-
-
 
 
 
