@@ -13,7 +13,7 @@
 - **Local LLM Integration:** Communicates with a local instance of Ollama for AI responses.
 
 ## 💬 Chat Interface
-The Chat Interface is a key feature of BrowserAI, enabling seamless interaction with Ollama LLMs directly from your browser.
+The Chat Interface is a key feature of Orian, enabling seamless interaction with Ollama LLMs directly from your browser.
 
 ### Features
 - **Chat with Ollama LLMs:** Interact with local language models for insightful responses and suggestions.
@@ -102,7 +102,7 @@ If you encounter any errors like the one above, ensure that Ollama is installed.
 
 # Contributing to Orian (Ollama WebUI) 🚀
 
-Thank you for considering contributing to BrowserAI (Ollama WebUI)! Your help is greatly appreciated. Here are some guidelines to get you started.
+Thank you for considering contributing to Orian (Ollama WebUI)! Your help is greatly appreciated. Here are some guidelines to get you started.
 
 ## Table of Contents
 1. [Code of Conduct](#code-of-conduct)
@@ -125,7 +125,7 @@ You can contribute in several ways:
 ## Setting Up the Repository
 
 1. **Fork the Repository**
-   - Navigate to the [BrowserAI (Ollama WebUI) GitHub page](https://github.com/KarthikeyaKollu/browserAI.01).
+   - Navigate to the [Orian (Ollama WebUI) GitHub page](https://github.com/KarthikeyaKollu/browserAI.01).
    - Click on the "Fork" button at the top right of the page to create a copy of the repository on your GitHub account.
 
 2. **Clone Your Fork**
@@ -201,5 +201,5 @@ By contributing, you agree that your contributions will be licensed under the MI
 
 ---
 
-Thank you for contributing to BrowserAI (Ollama WebUI)! Your help is greatly appreciated. 😊
+Thank you for contributing to Orian (Ollama WebUI)! Your help is greatly appreciated. 😊
 
