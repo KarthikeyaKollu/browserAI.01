@@ -3,6 +3,7 @@
 ## Overview
 BrowserAI (Ollama WebUI) is a Chrome extension that provides quick access to your favorite local Language Model (LLM) directly from your browser. With features like open-source chat integration, mail reply suggestions, and more, it's designed to enhance your browsing experience with AI capabilities.
 
+  ![Chat Interface Overview](  ![Chat Interface Overview]([https://dummyurl.com/chat-interface-overview.png](https://github.com/KarthikeyaKollu/browserAI.01/assets/108949445/ad146fd3-48ca-4c3d-b0f2-79fe99f5f201))))
 ## Features
 - **Open Side Panel:** Access your LLM with a side panel using `Ctrl+Shift+Left` (or `Command+Shift+Left` on macOS).
 - **Contextual Interaction:** Select and interact with parts of websites for enhanced browsing.
@@ -25,7 +26,7 @@ The Chat Interface is a key feature of BrowserAI, enabling seamless interaction 
 
 ### Images and Videos
 - **Chat Interface Overview**
-  ![Chat Interface Overview](https://dummyurl.com/chat-interface-overview.png)
+  ![Chat Interface Overview]([https://dummyurl.com/chat-interface-overview.png](https://github.com/KarthikeyaKollu/browserAI.01/assets/108949445/ad146fd3-48ca-4c3d-b0f2-79fe99f5f201))
 
 - **Ollama LLMs Interaction**
   ![Ollama Interaction Demo](https://dummyurl.com/ollama-interaction-demo.gif)
