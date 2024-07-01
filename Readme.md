@@ -25,19 +25,13 @@ The Chat Interface is a key feature of BrowserAI, enabling seamless interaction 
 - **Chat Window:** Easily accessible through the side panel.
 - **Interactive Suggestions:** Get real-time responses and suggestions based on the context of the webpage.
 
-### Images UI
-- **Chat Interface Overview**
-  [Chat Interface Overview1]()
 
 
 
-## Content Scripts
-- **Selection.js:** Runs on all websites to enable selection and interaction.
-    [Chat Interface Overview](https://github.com/KarthikeyaKollu/browserAI.01/assets/108949445/6e137498-c9ef-48be-a356-691fa6f1fb01)
-
+## More AI Features
 
 - **GoogleResultsComponent.js:** Enhances Google search results.
-    [Chat Interface Overview](https://github.com/KarthikeyaKollu/browserAI.01/assets/108949445/8c68e833-d9a9-4fca-b063-45ab2121482e)
+    [Chat Interface Overview](https://github.com/KarthikeyaKollu/browserAI.01/assets/108949445/f9389e15-bcbf-4d7e-82bf-75915551b0f4)
 
 
 - **EmailComponent.js:** Adds AI capabilities to Gmail.
@@ -46,6 +40,16 @@ The Chat Interface is a key feature of BrowserAI, enabling seamless interaction 
 
 
   [Chat Interface Overview](https://github.com/KarthikeyaKollu/browserAI.01/assets/108949445/717713bc-7169-48d5-b63b-4c8f8a2395bc)
+  
+  [Chat Interface Overview](https://github.com/KarthikeyaKollu/browserAI.01/assets/108949445/d5ae4288-01e4-4def-becd-9f43a9dd51d9)
+
+
+
+
+
+
+
+
 
 
 
@@ -77,8 +81,13 @@ The extension communicates with a local Ollama instance via the following endpoi
 
 # Installing Ollama
 
-If you encounter any errors, ensure that Ollama is installed. Follow these steps to install Ollama and pull the necessary models:
-![Commom=n Error](https://dummyurl.com/email-component-demo.gif)
+<img height="500px"  alt="SCR-20240702-dejr" src="https://github.com/KarthikeyaKollu/browserAI.01/assets/108949445/0dd336a7-b0d0-4565-9d8b-f3d430cbcee0">
+
+If you encounter any errors like above, ensure that Ollama is installed. Follow these steps to install Ollama and pull the necessary models:
+
+
+
+
 ### Installation Steps
 
 1. **Download Ollama**
