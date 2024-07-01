@@ -620,12 +620,11 @@ chrome.storage.onChanged.addListener(function (changes, namespace) {
     applyTheme(changes.theme.newValue);
   }
 });
+
 // window.open(chrome.runtime.getURL('options.html'));
 function applyTheme(theme) {
   var themeStyle = document.getElementById('theme');
-  if (theme == 'retro') {
-    themeStyle.href = 'css/retro.css';
-  } else if (theme == 'dark') {
+if (theme == 'dark') {
     themeStyle.href = 'css/dark.css';
   } else {
     themeStyle.href = 'css/light.css';
@@ -668,7 +667,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if (message.type === 'TEXT_SELECTED') {
      
       context_prompt.classList.remove('hidden');
-      context_prompt.value = message.text;
+      context_prompt.value = message.text.toString();
       closeButton.classList.remove('hidden')
   }
   if(message.type==="FOLLOWUP"){
@@ -774,22 +773,36 @@ document.addEventListener('DOMContentLoaded', () => {
 function startMonitoring() {
   function updateUsage() {
     chrome.system.cpu.getInfo((cpuInfo) => {
-      // console.log("CPU Info", cpuInfo);
-
-      // Calculate total CPU usage across all cores
-      const totalUsage = cpuInfo.processors.reduce((acc, processor) => {
-        return acc + processor.usage.total;
-      }, 0);
-
-      // Calculate percentage of total CPU usage
-      const totalPercent = ((totalUsage / (cpuInfo.processors.length * cpuInfo.numOfProcessors)) * 100).toFixed(2);
-      document.querySelector('#cpuUsage').textContent = "32%"
-
-
-
-      // Store or use these percentages as needed
-      chrome.storage.local.set({ cpuUsage: totalPercent });
+      if (previousCpuInfo) {
+        // Calculate the total usage difference since the last measurement
+        let totalCpuTime = 0;
+        let totalActiveTime = 0;
+        let previousTotalCpuTime = 0;
+        let previousTotalActiveTime = 0;
+  
+        cpuInfo.processors.forEach((processor, index) => {
+          const { user, kernel, idle, total } = processor.usage;
+          const { user: prevUser, kernel: prevKernel, idle: prevIdle, total: prevTotal } = previousCpuInfo.processors[index].usage;
+  
+          totalCpuTime += (total - prevTotal);
+          totalActiveTime += ((user - prevUser) + (kernel - prevKernel));
+          previousTotalCpuTime += (prevTotal - prevIdle);
+          previousTotalActiveTime += ((prevUser - prevIdle) + (prevKernel - prevIdle));
+        });
+  
+        // Calculate the percentage of CPU usage
+        const usagePercent = ((totalActiveTime / totalCpuTime) * 100).toFixed(1);
+        
+        document.querySelector('#cpuUsage').textContent = `${usagePercent}`
+  
+        // Store or use the CPU usage percentage as needed
+        chrome.storage.local.set({ cpuUsage: usagePercent });
+      }
+  
+      // Store current CPU info for the next measurement
+      previousCpuInfo = cpuInfo;
     });
+    
 
     chrome.system.memory.getInfo((memoryInfo) => {
 
@@ -811,6 +824,13 @@ function startMonitoring() {
 }
 
 startMonitoring();
+
+
+let previousCpuInfo = null;
+
+
+
+
 
 
 

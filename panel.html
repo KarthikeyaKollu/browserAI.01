@@ -1,8 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Chat OpenAI</title>
-    <title>Chat OpenAI</title>
+    <title>Orian</title>
     <link rel="stylesheet" id="theme" href="css/light.css">
     <script src="lib/marked.min.js" integrity="sha384-dZulhREgb+hCgQMhZ2VG0l37VQj5pJBq2w0h7Jn3tdMn36aXNepF1+FMLBB4O649" crossorigin="anonymous"></script>
     <script src="lib/prism.js"></script>
@@ -49,15 +48,18 @@
 
       <span id="settings" class="mx-auto text-white">NOT INITIALIZED</span>
 <!-- Indicators of system status --> 
-      <div class="text-white pr-6 space-y-2">
+      <div class="text-white group pr-6 space-y-2">
         <span class="usage border border-red-300 rounded-lg p-1">
           <span>CPU:</span> 
-          <span id="cpuUsage"> 20</span>
+          <span id="cpuUsage">00.0</span>
         </span>
         <div class="usage border border-purple-500 rounded-lg p-1">
           <span>RAM:</span>
-          <span id="ramUsage">20</span>
+          <span id="ramUsage">00.0</span>
         </div>
+        <span class="absolute -bottom-4  -right-3 mb-1 hidden group-hover:flex items-center justify-center bg-gray-800 text-white text-xs rounded px-2 py-1">
+          CPU and RAM usage % .
+      </span>
       </div>
 <!-- Indicators of system status --> 
   </div>
