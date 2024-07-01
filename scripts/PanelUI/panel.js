@@ -642,7 +642,7 @@ function initScript() {
     applyTheme(result.theme)
     if (API_KEY == undefined || API_KEY == '' || API_KEY == "undefined") {
       const chatEntry = document.createElement('p');
-      chatEntry.textContent = 'open-os: API_KEY not set. Please go to the options page to set it.';
+      chatEntry.textContent = 'Orian: API_KEY not set. Please go to the options page to set it.';
       chatlog.appendChild(chatEntry);
       updateSettingString();
     } else {

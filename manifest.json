@@ -4,6 +4,8 @@
   "version": "0.6",
   "description": "Quick access to your favorite local LLM from your browser (Ollama).",
   "icons": {
+    "16":"assets/logo.png",
+    "48":"assets/logo.png",
     "128": "assets/logo.png"
   },"commands": {
   "open_side_panel": {

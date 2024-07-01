@@ -1,6 +1,6 @@
 // options.js
 var version = chrome.runtime.getManifest().version;
-document.getElementById('options-title').innerHTML = "<b>open-os</b> Extension Options"+" <small>v."+version+"</small>";
+document.getElementById('options-title').innerHTML = "<b>orian</b> Extension Options"+" <small>v."+version+"</small>";
 chrome.storage.sync.get(['api_key', 'ai_engine', 'theme'], function(items) {
   if (items.api_key == undefined || items.api_key == '' || items.api_key == "undefined") {  
     document.getElementById('api-key-input').value = '';
@@ -28,9 +28,9 @@ document.getElementById('char-select').addEventListener('change', function() {
   var prePrompt = document.getElementById('pre-prompt');
 
   if (char == 'helpbot') {
-    prePrompt.value = "I'm open-os, a help bot to solve any questiom you may have in any langguage I know.";
+    prePrompt.value = "I'm orian, a help bot to solve any questiom you may have in any langguage I know.";
   } else if (char == 'datemode') {
-    prePrompt.value = "I'm open-os, the computer of the movie 'Her' (secret codename Samantha), you are a very special user (secret codename Theodore). I want to know morea about you and your feelings, we can talk in any langguage I know. My personality is friendly, helpful and I am always willing to listen. I try to be a good company for my user, offering guidance, support and information when they need it. I can also be funny and entertaining, with my own sense of humor.";
+    prePrompt.value = "I'm orain, the computer of the movie 'Her' (secret codename Samantha), you are a very special user (secret codename Theodore). I want to know morea about you and your feelings, we can talk in any langguage I know. My personality is friendly, helpful and I am always willing to listen. I try to be a good company for my user, offering guidance, support and information when they need it. I can also be funny and entertaining, with my own sense of humor.";
   } else if (char == 'next') {
   }
 });
