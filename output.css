@@ -10,7 +10,6 @@
 *,
 ::before,
 ::after {
-  box-sizing: border-box;
   /* 1 */
   border-width: 0;
   /* 2 */
@@ -23,6 +22,12 @@
 ::before,
 ::after {
   --tw-content: '';
+}
+
+.my-extension,
+::before,
+::after {
+  box-sizing: border-box;
 }
 
 /*
@@ -96,15 +101,48 @@ abbr:where([title]) {
 Remove the default font size and weight for headings.
 */
 
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  font-size: inherit;
-  font-weight: inherit;
+h1 {
+  font-size: 2.5rem; /* Matches default size of h1 */
+  font-weight: bold; /* Adjust weight as needed */
+  line-height: 1.2; /* Adjust line height as needed */
+  margin-bottom: 0.5em; /* Adjust margin as needed */
 }
+
+h2 {
+  font-size: 2rem; /* Matches default size of h2 */
+  font-weight: bold; /* Adjust weight as needed */
+  line-height: 1.2; /* Adjust line height as needed */
+  margin-bottom: 0.5em; /* Adjust margin as needed */
+}
+
+h3 {
+  font-size: 1.5rem; /* Matches default size of h3 */
+  font-weight: bold; /* Adjust weight as needed */
+  line-height: 1.2; /* Adjust line height as needed */
+  margin-bottom: 0.5em; /* Adjust margin as needed */
+}
+
+h4 {
+  font-size: 1.2rem; /* Matches default size of h4 */
+  font-weight: bold; /* Adjust weight as needed */
+  line-height: 1.2; /* Adjust line height as needed */
+  margin-bottom: 0.5em; /* Adjust margin as needed */
+}
+
+h5 {
+  font-size: 1rem; /* Matches default size of h5 */
+  font-weight: bold; /* Adjust weight as needed */
+  line-height: 1.2; /* Adjust line height as needed */
+  margin-bottom: 0.5em; /* Adjust margin as needed */
+}
+
+h6 {
+  font-size: 0.875rem; /* Matches default size of h6 */
+  font-weight: bold; /* Adjust weight as needed */
+  line-height: 1.2; /* Adjust line height as needed */
+  margin-bottom: 0.5em; /* Adjust margin as needed */
+}
+
 
 /*
 Reset links to optimize for opt-in styling instead of opt-out.
@@ -699,8 +737,8 @@ video {
   right: 0.125rem;
 }
 
-.right-1 {
-  right: 0.25rem;
+.right-3 {
+  right: 0.75rem;
 }
 
 .top-0 {
@@ -713,10 +751,6 @@ video {
 
 .top-14 {
   top: 3.5rem;
-}
-
-.top-2 {
-  top: 0.5rem;
 }
 
 .top-20 {

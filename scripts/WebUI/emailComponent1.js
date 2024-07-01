@@ -11,18 +11,15 @@ function waitForElement(selector, callback) {
 
 
 
+
+
+
 // Function to add quick reply buttons to the email interface
 async function addReply(reply) {
-    // HTML structure for the reply options
     const con = `
-      <div class="p-4 ml-6 flex gap-4 generate-reply-container my-extension">
-
-          <span class="text-blue-500 border border-blue-500 p-2 px-3 rounded-lg cursor-pointer reply-reply hover:bg-blue-500 hover:text-white" data-prompt="Write a simple and crisp reply in less than 50 words saying yes or replying affirmatively to the other person">Reply "Yes"</span>
-
-
-          <span class="text-red-500 border border-red-500 p-2 px-3 rounded-lg cursor-pointer hover:bg-red-500 hover:text-white reply-reply" data-prompt="Write a simple and crisp reply in less than 50 words saying no or replying negatively (or declining) to the other person">Reply "No"</span>
-
-          
+      <div class=" generate-reply-container">
+          <span class="reply-reply" data-prompt="Write a simple and crisp reply in less than 50 words saying yes or replying affirmatively to the other person">Reply "Yes"</span>
+          <span class="reply-reply text-red-500" data-prompt="Write a simple and crisp reply in less than 50 words saying no or replying negatively (or declining) to the other person">Reply "No"</span>
       </div>`;
 
     console.log(reply);
@@ -50,10 +47,10 @@ async function addReply(reply) {
 
                   Generate an email reply based on the following context and user's choice:
 
-                  Context:{ ${contextEmail}}
+                  Context: ${contextEmail}
 
-                  User's choice:{ ${btn.dataset.prompt}}
-                \`\`\`Plaintext
+                  User's choice: ${btn.dataset.prompt}
+                \`\`\`plainText
                   {your response should be within this}
                   \`\`\`
               `;
@@ -69,26 +66,25 @@ async function addReply(reply) {
 // Function to add email composition interface
 async function addEmailComposeComponent(d) {
     // HTML structure for the compose interface
-    const content = `<div class="my-extension  flex items-center justify-center">
-      <div class="compose-container fade-in bg-white rounded-lg">
-          <div class="p-2 flex gap-4 generate-compose">
-              <span class="hover:bg-blue-500 hover:text-white text-blue-500 border border-blue-500 p-2 px-3 rounded-lg cursor-pointer reply-compose" data-prompt="Write a simple and crisp reply in less than 50 words saying yes or replying affirmatively to the other person">Rewrite ✍🏼</span>
-              <span class="text-yellow-500 hover:bg-yellow-500 hover:text-white border border-yellow-500 p-2 px-3 rounded-lg cursor-pointer reply-compose" data-prompt="Write a professional reply to follow up on the points mentioned in the previous messages">Create <span class="text-blue">✨</span></span>
+    const content = `<div class="my-extension">
+      <div class="compose-container fade-in">
+          <div class="generate-compose">
+              <span class="reply-compose" data-prompt="Write a simple and crisp reply in less than 50 words saying yes or replying affirmatively to the other person">Rewrite ✍🏼</span>
+              <span class="text-yellow-500 reply-compose" data-prompt="Write a professional reply to follow up on the points mentioned in the previous messages">Create <span class="text-blue">✨</span></span>
           </div>
-          <div class="p-2 gap-2 create-compose hidden items-center align-middle bg-white rounded-lg">
-              <span class="p-2 cursor-pointer back hover:bg-slate-200 rounded-lg">←</span>
-              <input type="text" placeholder="Write with Ai" class="border border-blue-500 p-2 rounded-lg w-64 input-prompt">
-              <img src="https://img.icons8.com/?size=100&id=g8ltXTwIfJ1n&format=png&color=000000" class="border bg-black hover:bg-white px-3 p-2 rounded-lg cursor-pointer generate" width="22px" height="25px"/>
+          <div class="create-compose">
+              <span class="back">←</span>
+              <input type="text" placeholder="Write with Ai" class="input-prompt">
+              <img src="https://img.icons8.com/?size=100&id=g8ltXTwIfJ1n&format=png&color=000000" class=" generate" width="50px" height="50px"/>
           </div>
       </div>
-      <button id="toggleButton" class="p-2 m-2 rounded-full absolute bottom-0 right-0">&#x25B6;</button>
+      <button id="toggleButton" class=">&#x25B6;</button>
   </div>`;
 
     const newDiv = document.createElement('div');
     newDiv.classList.add('absolute', 'bottom-0', 'left-0', 'w-full', 'rounded-lg', 'z-50');
     d.classList.add('relative');
     d.appendChild(newDiv);
-
     newDiv.innerHTML = content;
 
     const container = d.querySelector(".compose-container");
@@ -125,7 +121,6 @@ async function suggestReplyForCompose(d) {
 
     await delay(2000); // Delay for loading
     const context_email_div = d.querySelector('.Am.aiL.Al.editable.LW-avf.tS-tW');
-
     console.log(context_email_div);
     const toggleButton = d.querySelector('#toggleButton');
 
@@ -150,7 +145,7 @@ async function suggestReplyForCompose(d) {
                 const fullPrompt = `You are a helpful assistant. Your task is to rewrite the provided email to improve its clarity, professionalism, and conciseness. Ensure the rewritten email is formal and appropriate for professional communication. Don't give any explanation or notes.
 
               Please rewrite the following email:
-               ${context_email}
+              ${context_email}
 
                  \`\`\`
                   {your response should be within this}
@@ -263,55 +258,29 @@ async function sendDataToBackgroundCompose(query, d) {
             toggleButton.click();
         }
 
-
         if (message) {
             message.innerHTML = "";
         }
 
         if (message) {
-            // const temp = document.createElement('div')
-            // temp.classList.add('z-9999')
-            // d.appendChild(temp)
-            // temp.innerHTML = `
-            //  <img src="https://img.icons8.com/color/48/stop.png" id="stop-button" class="  animate-spin cursor-pointer px-2 absolute top-2 right-1 " width="40px"/>
-            //  `
             message.innerHTML += `
               <div class="loading-compose fade-in">
-                  <div class="animated-gradient h-3 rounded-md my-3 slow-animation w-[90%]"></div>
-                  <div class="animated-gradient h-3 rounded-md my-3 fast-animation w-[80%]"></div>
-              </div>    
-              `;
+                  <div class="animated-gradient slow-animation"></div>
+                  <div class="animated-gradient fast-animation"></div>
+              </div>`;
 
             const loading = document.querySelector(".loading-compose");
-
-
-
-
-
             port.onMessage.addListener(function (response) {
-
                 if (response.type === 'WORD') {
                     console.log("Received from background:", response);
-                    // loading.classList.add('fade-out');
-                    // loading.classList.remove('fade-in');
+                    loading.classList.add('fade-out');
+                    loading.classList.remove('fade-in');
                     message.textContent += response.resp.replace(/[*`]/g, '');
                 } else if (response.type === 'FINISHED') {
                     console.log(response);
                     const parsedcontent = marked.parse(response.resp);
                     message.innerHTML = parsedcontent;
                 }
-
-                // document.getElementById('stop-button').addEventListener('click', () => {
-                //     // Abort the ongoing request
-
-
-                //     loading.classList.add('hidden')
-
-                //     port.postMessage({ type: 'STOP' });
-                // });
-
-
-
             });
         } else {
             console.error("No message div is found");

@@ -240,6 +240,9 @@ async function getModelFromStorage() {
 }
 // Function to handle user input and call the API functions
 async function submitRequest() {
+ if(ongoing){
+  return
+ }
   const input = promptInput.value;
   if(!context_prompt.classList.contains('hidden')){
     context_prompt.classList.add('hidden')
@@ -249,8 +252,8 @@ async function submitRequest() {
   if (input.length <= 0) {
     return;
   }
-  controller.abort();
-  controller = new AbortController();
+  // controller.abort();
+  // controller = new AbortController();
 
   handleSuggestion();
   const contextInput = context_prompt.value.toString();
@@ -263,7 +266,9 @@ console.log(selectedModel)
 
 
   updateChatlog(chatlog, contextInput, input);
-  const chatResponse = createChatResponseElement(chatlog);
+  const [chatResponse, chatResponse_div] = createChatResponseElement(chatlog);
+  console.log(chatResponse ,chatResponse_div)
+
 
  
 
@@ -284,23 +289,33 @@ console.log(selectedModel)
   promptInput.value = '';
   context_prompt.value = '';
 
+
  const Model = await getModelFromStorage()
+ console.log(Model)
+
+
+
+
 if(!Model){
   Model = selectedModel
 }
-
-  const data = { model: Model, prompt: basicPrompt, context: chatlog.context };
+if(chatlog.context || !chatlog.context ){
+  document.getElementById('model-select').disabled=true;
+  console.log("yess disabled")
+}
+  const data = { model: Model, prompt: basicPrompt, context: chatlog.context }; 
   
 
   try {
     const response = await postRequest(data);
-    processResponse(response, chatlog, chatResponse, loading);
+    processResponse(response, chatlog, chatResponse, loading,chatResponse_div);
   } catch (error) {
     displayError(error, chatlog);
   }
 }
 
 function handleSuggestion() {
+ 
   const suggestion = document.querySelector('.suggestion');
   if (!suggestion.classList.contains('hidden')) {
     suggestion.classList.add('hidden');
@@ -318,9 +333,9 @@ function buildPrompt(contextInput, input) {
       ${input}
       
    
-      
+      \`\`\`{language that is asked}
       {your response should be within this}
-      
+      \`\`\`
 
     `;
   } else {
@@ -332,7 +347,9 @@ function buildPrompt(contextInput, input) {
       
 
       
+       \`\`\`{language that is asked}
       {your response should be within this}
+      \`\`\`
       
 
     `;
@@ -343,19 +360,19 @@ function updateChatlog(chatlog, contextInput, input) {
   const chatEntry = document.createElement('div');
   if (contextInput.length > 0) {
     chatEntry.innerHTML = `
-      <div class="w-[90%]  items-center p-4 bg-violet-500 border border-gray-300 mx-auto rounded-bl-lg rounded-tr-lg rounded-tl-lg mb-6 fade-in">
+      <div class="w-[90%] items-center p-2 bg-[#009afd] border border-gray-300 mx-auto rounded-bl-lg rounded-tr-lg rounded-tl-lg mb-4 fade-in">
         <div class="w-full min-h-20 px-3 py-2 rounded-md bg-black text-white resize-none border overflow-auto max-h-40 glow">
           ${contextInput}
         </div> 
-        <div class="w-full flex-grow text-white  mr-3 resize-none outline-none p-2 text-lg fade-in">
+        <div class="w-full flex-grow text-white  mr-3 pl-1  text-lg fade-in">
           ${input}
         </div>
       </div>
     `;
   } else {
     chatEntry.innerHTML = `
-      <div class="w-[95%] flex justify-end mb-6">
-        <span type="text" id="prompt" placeholder="Ask a follow-up" class="fade-in bg-violet-500 border border-gray-300 text-end p-3 px-4 test-white rounded-bl-lg text-white rounded-tr-lg text-lg rounded-tl-lg max-w-[90%]">
+      <div class="w-[95%] flex justify-end mb-6 fade-in">
+        <span type="text" id="prompt" placeholder="Ask a follow-up" class="fade-in bg-[#009afd]  text-end p-2 px-4 test-white rounded-bl-lg text-white rounded-tr-lg text-lg rounded-tl-lg max-w-[90%]">
           ${input}
         </span>
       </div>
@@ -365,20 +382,18 @@ function updateChatlog(chatlog, contextInput, input) {
 }
 
 function createChatResponseElement(chatlog) {
+  const chatResponse_div = document.createElement('div');
+  chatResponse_div.classList.add('flex', 'justify-center','items-center','mb-[6%]', 'w-[80%]','glow', 'ml-[6%]','chatResponse');
   const chatResponse = document.createElement('div');
-  chatResponse.classList.add('flex', 'justify-start', 'mb-6', 'w-[90%]');
-  const chatResponse_p = document.createElement('div');
-  chatResponse_p.classList.add('bg-slate-200', 'p-4', 'rounded-tl-lg', 'rounded-tr-lg', 'rounded-br-lg', 'ml-[6%]', 'glow', 'w-[95%]', 'fade-in');
-  chatResponse_p.classList.add('hidden'); // Initially hidden
-  chatResponse_p.id = "response_llm";
-  chatResponse.appendChild(chatResponse_p);
-  chatlog.appendChild(chatResponse);
-  return chatResponse_p;
+  chatResponse.classList.add('bg-[#333333]', 'p-4', 'rounded-tl-lg', 'rounded-tr-lg', 'rounded-br-lg', 'w-[100%]', 'fade-in','text-white');
+  chatResponse_div.classList.add('hidden'); // Initially hidden
+  chatResponse.id = "response_llm";
+  chatResponse_div.appendChild(chatResponse);
+  chatlog.appendChild(chatResponse_div);
+  return [chatResponse,chatResponse_div];
 }
-
-
-
-async function processResponse(response, chatlog, chatResponse, loading) {
+var ongoing = false;
+async function processResponse(response, chatlog, chatResponse, loading,chatResponse_div) {
   let data_p = '';
   await getResponse(response, parsedResponse => {
     let word = parsedResponse.response;
@@ -390,19 +405,22 @@ async function processResponse(response, chatlog, chatResponse, loading) {
     if (word !== undefined) {
       chatResponse.innerHTML += word.replace(/[*`#]/g, '');
       data_p += word;
+      ongoing = true
     }
     loading.classList.add('hidden');
     loading.classList.remove('flex');
-    chatResponse.classList.remove('hidden'); // Show response after processing
+    chatResponse_div.classList.remove('hidden'); // Show response after processing
   });
   console.log("done generating")
   document.getElementById('stop-button').classList.add('hidden'); // Hide the stop button after the request completes
   document.getElementById('submit').classList.remove('hidden');
-
+  ongoing=false
   chatResponse.innerHTML = marked.parse(data_p);
+  console.log(data_p)
+  console.log(marked.parse(data_p))
   Prism.highlightAllUnder(chatResponse);
-  chatResponse.classList.remove('glow');
-  sendToContent("DONE");
+  chatResponse_div.classList.remove('glow');
+
 }
 
 function displayError(error, chatlog) {
@@ -412,15 +430,15 @@ function displayError(error, chatlog) {
 
 
 
-function sendToContent(message) {
-  chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-    const activeTab = tabs[0];
-    // Send a message to the content script in the active tab
-    chrome.tabs.sendMessage(activeTab.id, { rewrite: message }, (response) => {
-      console.log(response);
-    });
-  });
-}
+// function sendToContent(message) {
+//   chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+//     const activeTab = tabs[0];
+//     // Send a message to the content script in the active tab
+//     chrome.tabs.sendMessage(activeTab.id, { rewrite: message }, (response) => {
+//       console.log(response);
+//     });
+//   });
+// }
 
 
 addContextButton.addEventListener('click',()=>{
@@ -441,18 +459,24 @@ closeButton.addEventListener('click', async () => {
 document.getElementById('stop-button').addEventListener('click', () => {
   showAlert("Response it aborted By the user")
   status_failed=true
+  ongoing=false
   // Abort the ongoing request
   controller.abort();
   controller = new AbortController();
   const response_llm = document.querySelectorAll("#response_llm");
+  const chatResponse_div = document.querySelectorAll('.chatResponse')
+  // console.log(response_llm[response_llm.length -1])
+  let currResp =chatResponse_div[chatResponse_div.length -1]
 
-  console.log(response_llm[response_llm.length -1])
-  let currResp = response_llm[response_llm.length -1]
-  // console.log(chatResponse_p)
-   currResp.classList.remove('glow')
-  currResp.classList.add('bg-red-300','text-white')
+  
+  currResp.classList.remove('glow')
+  currResp.classList.add('remove-glow')
   document.getElementById('stop-button').classList.add('hidden'); // Hide the stop button
-  document.getElementById('submit').classList.remove('hidden');
+  document.getElementById('submit').classList.remove('hidden'); 
+  
+  // const loading = document.getElementById('loading');
+  // loading.classList.add('hidden');
+  // loading.classList.remove('flex');
   
   
 });
@@ -515,8 +539,28 @@ var observer = new MutationObserver(function (mutations) {
 // Configuration of the observer
 var config = { childList: true, subtree: true };
 
-// Start observing the target node for configured mutations
-observer.observe(chatLog, config);
+// Function to check if bottom is visible
+function isBottomVisible(elem) {
+  return elem.scrollHeight - elem.scrollTop <= elem.clientHeight;
+}
+
+// Check visibility initially and start/stop observer
+function checkVisibilityAndStartObserver() {
+  if (isBottomVisible(chatLog)) {
+    observer.observe(chatLog, config);
+  } else {
+    observer.disconnect();
+  }
+}
+
+// Event listener for user scrolling
+chatLog.addEventListener('scroll', function() {
+  checkVisibilityAndStartObserver();
+});
+
+// Check visibility on page load
+checkVisibilityAndStartObserver();
+
 
 
 const suggestions = document.querySelectorAll('.suggestions');
@@ -555,8 +599,15 @@ suggestions.forEach(suggestion => {
 
 
 function updateSettingString() {
+  const chatlog = document.getElementById('chatlog');
+  if(chatLog && chatlog.context){
+     
+        showAlert("Please reload BrowserAI to apply updates and ensure smooth operation.")
 
+  }
   settings.innerHTML = '' + ollama_host.split("//")[1];
+
+  
 }
 
 // Theme updates from options page
@@ -649,17 +700,12 @@ document.addEventListener('DOMContentLoaded', () => {
         preElements.forEach(pre => {
           pre.classList.add('content-div', 'relative');
           const codeElement = pre.querySelector('code');
-          if (codeElement) {
-            if (codeElement.classList.length <= 0) {
-              // codeElement.classList.add('language-javascript');
-              // Prism.highlightAll(codeElement)
-            }
-            else 
-            {
+
+          if (codeElement && codeElement.classList.length > 0) {
+                       
               var lang = codeElement.classList[0].split("-")[1];
               lang = lang.charAt(0).toUpperCase() + lang.slice(1);
 
-            }
             // adding that copy and language name div above the <pre></pre> tag
             var toolbar = document.createElement("div");
             toolbar.classList.add('bg-black', 'text-white', 'p-2', 'rounded-tr-lg', 'rounded-tl-lg', 'toolbar', 'flex', 'justify-between', 'mt-3')
@@ -695,7 +741,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
               });
             }
+          }else{
+            let pElement = document.createElement('p');
+            pElement.textContent = pre.textContent;
+            pre.parentNode.replaceChild(pElement, pre);
+
           }
+          
         });
       }
     });
@@ -731,7 +783,7 @@ function startMonitoring() {
 
       // Calculate percentage of total CPU usage
       const totalPercent = ((totalUsage / (cpuInfo.processors.length * cpuInfo.numOfProcessors)) * 100).toFixed(2);
-      document.querySelector('#cpuUsage').textContent = "----"
+      document.querySelector('#cpuUsage').textContent = "32%"
 
 
 

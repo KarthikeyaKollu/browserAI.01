@@ -21,7 +21,7 @@ chrome.runtime.onConnect.addListener(function(port) {
     if (msg.type === "SUGGESTREPLY") {
       getResponseFromLLM(msg.query, port);
     }
-   
+ 
   });
 });
 
@@ -38,7 +38,7 @@ async function getModelFromStorage() {
 
 // Function to get response from Language Learning Model (LLM)
 async function getResponseFromLLM(query, port) {
-  console.log("LLM is called........");
+
 
 const selectedModel = await getModelFromStorage();
  console.log(selectedModel)
@@ -52,7 +52,9 @@ const selectedModel = await getModelFromStorage();
       if (word !== undefined) {
         console.log(word);
         d += word; // Accumulate the response
-        port.postMessage({ type: 'WORD', resp: word }); // Send each word back to the content script
+        port.postMessage({ type: 'WORD', resp: word });
+
+   
       }
     });
     port.postMessage({ type: 'WORD', resp: d }); // Send the complete response

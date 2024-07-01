@@ -8,10 +8,10 @@ function delay(ms) {
 async function googleSearchComponent() {
 
   const content = ` 
-    <div>
-         <div class="mb-10 w-96 container-search relative">
-         <!--- error message div -->
-<div id="alert-1" class="hidden absolute top-14 left-1/2 transform -translate-x-1/2 -translate-y-full mt-4 items-center p-4 mb-4 text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400 transition-transform duration-500 ease-in-out w-[90%]" role="alert" style="z-index: 9999;">
+    <div class="my-extension w-96">
+         <div class="mb-10 w-full container-search relative">
+  <!--- error message div -->
+<div id="alert-1" class="hidden absolute top-14 left-1/2 transform -translate-x-1/2 -translate-y-full mt-4 items-center p-4 px-2 text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400 transition-transform duration-500 ease-in-out w-[90%]" role="alert" style="z-index: 9999;">
   <svg class="flex-shrink-0 w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
     <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"/>
   </svg>
@@ -54,12 +54,15 @@ async function googleSearchComponent() {
                  
                   <button class="border border-blue-700 text-white py-2 px-4 rounded-lg hover:bg-blue-400 " id="startChat">Ask a followup</button>
                   <button class="bg-gray-700 text-white py-2 px-4 rounded-lg hover:bg-gray-900" id="startChat">Start New Chat</button>
-                   <img src="https://img.icons8.com/color/48/stop.png" id="stop-button" class=" text-white   animate-spin cursor-pointer px-2 absolute -right-3 -top-16 "/>
-                  <img src="https://img.icons8.com/?size=100&id=13906&format=png&color=000000" id="reload-button" class=" text-white  cursor-pointer px-2 absolute right-3 -top-16 hover:bg-slate-700  rounded-lg hidden " width="50px" />
+
+                   <img src="https://img.icons8.com/color/48/stop.png" id="stop-button" class="  animate-spin cursor-pointer px-2 absolute -right-3 -top-16 " width="40px"/>
+
+                  <img src="https://img.icons8.com/?size=100&id=13906&format=png&color=000000" id="reload-button" class="cursor-pointer px-2 absolute -right-3 -top-16 hover:bg-slate-700  rounded-lg hidden " width="30px" />
+
   
               </div>
               <div class="mt-4 text-center">
-                  <button class="border border-purple-300 text-white py-1 px-3 rounded-lg  text-[12px]">🚀 Powered by BrowserAI</button>
+                  <button class="border border-purple-300 text-white py-1 px-3 rounded-lg  text-[12px]">🚀 Powered by Orian (Ollama WebUI)</button>
               </div>
   
                  
@@ -69,7 +72,7 @@ async function googleSearchComponent() {
   
       </div>
   
-      <div class=" bg-yellow-600 w-full text-sm text-center  py-4 px-4 rounded-br-lg rounded-bl-lg">AI maybe inaccurate. Use 'Live Search' for best result</div>
+      <div class=" bg-yellow-600 w-full text-sm text-center  py-4  rounded-br-lg rounded-bl-lg">AI maybe inaccurate. Use 'Live Search' for best result</div>
       </div>
     `;
 
@@ -105,7 +108,7 @@ function showSummary(content) {
 function sendDataToBackground_Search(query) {
 
 
-  const live_search = true;
+  const live_search = false;
   let fullPrompt = ''
   if (!live_search) {
     fullPrompt = `
@@ -115,8 +118,10 @@ function sendDataToBackground_Search(query) {
           ${query}
     
         
-    
-          {your response should be within this}
+                \`\`\`plainText
+                  {your response should be within this}
+                  \`\`\`
+       
     
           
       
@@ -161,7 +166,7 @@ function sendDataToBackground_Search(query) {
   const port = chrome.runtime.connect({ name: 'ollama_port' });
 
   // Listening for messages from background script
-  port.onMessage.addListener(function (response) {
+  port.onMessage.addListener(async function (response) {
     if (response.type === "ERROR") {
       showAlert(response.resp)
       loading_search.classList.add('hidden');
@@ -172,16 +177,20 @@ function sendDataToBackground_Search(query) {
       console.log("Received from background:", response);
       container.innerHTML += response.resp.replace(/[*`]/g, '') + ' ';
       loading_search.classList.add('hidden');
+      port.postMessage({ status: true ,type:"STREAM"});
     } else if (response.type === 'FINISHED') {
 
       console.log(container.innerHTML);
       const parsedContent = marked.parse(response.resp);
       console.log(parsedContent);
-
+       
       container.innerHTML = parsedContent;
       document.getElementById('stop-button').classList.add('hidden');
       document.getElementById('reload-button').classList.remove('hidden');
 
+      await delay(700)
+      console.log(document.querySelectorAll('pre'))
+      addCopyButtonsAndClasses(document.querySelectorAll('pre'));
 
       // Ensure Prism.js highlighting is applied after content update
       const observer = new MutationObserver((mutations) => {
@@ -194,8 +203,16 @@ function sendDataToBackground_Search(query) {
       observer.observe(document.body, { childList: true, subtree: true });
 
       // Initial call to handle any existing content
-      // addCopyButtonsAndClasses(document.querySelectorAll('pre:not(.container-div)'));
+      // a
+
+
+
+
+
+
+      
     }
+    
   });
 
 
@@ -223,8 +240,8 @@ const addCopyButtonsAndClasses = (nodes) => {
   nodes.forEach(node => {
     if (node.nodeType === Node.ELEMENT_NODE) {
       // Select <pre> elements, excluding those with the class 'content-div'
-      const preElements = node.matches('pre:not(.content-div)') ? [node] : node.querySelectorAll('pre:not(.content-div)');
-
+      const preElements = node.matches('pre') ? [node] : node.querySelectorAll('pre');
+      console.log(preElements)
       preElements.forEach(pre => {
         // Check if the <pre> element is within a '.container-search' div
         if (pre.closest('.container-search')) {

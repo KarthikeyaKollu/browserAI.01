@@ -35,9 +35,9 @@
 <!--- End of error message div -->
 
   <!-- Start of Headder div --> 
-<div class="w-full flex items-center p-4 bg-[#171717] border-b border-[#212121] fixed top-0" style="z-index: 999;">
+<div class="w-full flex items-center p-4 bg-[#171717] border-b border-[#212121] " style="z-index: 999;">
     <!-- ModelSelectbox --> 
-      <select class="form-select p-2 border border-gray-300 rounded focus:outline-none" id="model-select">
+      <select class="form-select p-2 border border-gray-300 rounded focus:outline-none w-28 md:w-36" id="model-select">
       </select>
       <!-- ModelSelectbox --> 
 <!-- Indicators of Model status --> 
@@ -66,8 +66,11 @@
 <!-- Start of chat loggg -->
     <div id="chatlog" class="flex-grow overflow-auto p-4 ">
       <!--- Start of Suggestions at start page div -->
-     <div class="justify-center items-center  flex h-full">
-      <div class="flex flex-col space-y-6 items-start suggestion">
+     <div class="justify-center items-center  flex h-full suggestion">
+  
+
+      
+      <div class="flex flex-col space-y-6 items-start ">
         <!-- Coding Icon -->
         <div class="p-3 bg-[#212121] border border-gray-600 rounded-lg shadow-lg cursor-pointer w-44 hover:bg-gray-600 suggestions">
             <img src="https://img.icons8.com/fluency/48/000000/source-code.png" alt="Coding icon" class="w-6 h-6 mr-0">
@@ -95,7 +98,7 @@
   <!-- End chat loggg -->
     
 <!-- Start loading intially hidden bounce animation -->    
-    <div class="p-5 ml-[5%] hidden absolute bottom-36 " id="loading">
+    <div class="p-5 ml-[5%] hidden absolute bottom-40 " id="loading">
       <span class="relative flex h-3 w-3 mr-2" style="animation: bounce 1s infinite; animation-delay: 0s;">
        
         <span id="status1" class="relative inline-flex rounded-full h-3 w-3 bg-slate-500"></span>
@@ -132,8 +135,15 @@
      <!--End  Input textrea --> 
       <!--start  Addcontext, STOP and Enter buttons --> 
     <div class="flex justify-between">
-        <span class=" text-slate-300 hover:text-white rounded-lg p-1 cursor-pointer input-context-button">+ AddContext</span>
-        <span class="text-white bg-blue-500 p-1 rounded-lg hover:bg-blue-700 hover:text-slate-500 cursor-pointer" id="submit">&#x23CE; Enter</span>
+        <span class=" text-slate-300 group  hover:text-white rounded-lg p-1 cursor-pointer input-context-button">
+          + Add Context
+          <span class="absolute bottom-10 mb-1 hidden group-hover:flex items-center justify-center bg-gray-800 text-white text-xs rounded px-2 py-1">
+            Add context to include more data.
+        </span>
+        </span>
+
+        <span class="text-white bg-blue-500 p-1 rounded-lg hover:bg-blue-700 hover:text-slate-500 cursor-pointer items-baseline" id="submit">&#x23CE; Enter</span>
+
         <span id="stop-button" class="hidden text-white bg-red-500 p-1 rounded-lg hover:bg-red-700 hover:text-slate-500 cursor-pointer px-2">STOP</span>  
     </div>
       <!--start  Addcontext, STOP and Enter buttons --> 

@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+
+
+
+
 .glow {
  
   border: 2px solid transparent; /* Start with a transparent border */
@@ -10,32 +14,45 @@
 
 .glow::before {
   content: '';
-  
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  z-index: -1;
+  background: conic-gradient(#5c2791, #6e2a99, #ad2c9c);
+  background-size: 400% 400%;
+  border-radius: 10px 10px 10px 0;
+  animation: rotating 1s linear infinite;
+}
+
+@keyframes rotating {
+  0% {
+    background-position: 0% 50%;
+  }
+  100% {
+    background-position: 100% 50%;
+  }
+}
+.remove-glow {
+ 
+  border: 1px solid transparent; /* Start with a transparent border */
+  position: relative;
+}
+.remove-glow::before{
+  content: '';
   position: absolute;
   top: -5px;
   left: -5px;
   right: -5px;
   bottom: -5px;
   z-index: -1;
-  background: linear-gradient(45deg, #ff00ff, #00ffff, #ffff00, #ff00ff);
- 
+  background: rgb(195, 45, 45);
   background-size: 400% 400%;
   border-radius: 10px 10px 10px 0;
-  animation: glowing 10s linear infinite;
+ 
 }
 
-
-@keyframes glowing {
-  0% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-  100% {
-    background-position: 0% 50%;
-  }
-}
 /* .copy-button{
 
   position:absolute;
@@ -47,6 +64,10 @@
 .animated-gradient {
   background: linear-gradient(to right, rgb(20, 31, 174), rgb(166, 188, 224), rgb(20, 31, 174), rgb(153, 156, 156));
   background-size: 400%;
+  height: 0.75rem;
+  border-radius: 0.25rem;
+  margin-top: 0.75rem;
+
   animation: gradient-animation infinite;
 }
 
@@ -69,6 +90,7 @@
 
 .fast-animation {
   animation-duration: 1s; /* Fast animation */
+  width: 90%;
 }
 
 .super-fast-animation {
@@ -117,5 +139,7 @@
     transform: translateY(-5px); /* Bounce down */
   }
 }
+
+
 
 
