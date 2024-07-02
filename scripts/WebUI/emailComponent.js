@@ -9,8 +9,54 @@ function waitForElement(selector, callback) {
     }, 500); // Check every 500ms
 }
 
+async function showAlert(message){
+    const content =`<div id="alert-1" class="hidden fixed top-20 left-1/2 transform -translate-x-1/2 -translate-y-full mt-4 items-center p-4 mb-4 text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400 transition-transform duration-500 ease-in-out w-[40%]" role="alert" style="z-index: 9999;">
+  <!--- Icon for the alert -->
+  <svg class="flex-shrink-0 w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+    <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"/>
+  </svg>
+  
+  <!--- Main message content -->
+  <div class="ml-3 text-sm font-medium alert-message">
+    A simple info alert with an example message. Give it a click if you like.
+  </div>
+  
+  <!--- Close button -->
+  <button type="button" class="ms-auto -mx-1.5 -my-1.5 bg-red-50 text-red-500 rounded-lg focus:ring-2 focus:ring-red-400 p-1.5 hover:bg-red-200 inline-flex items-center justify-center h-8 w-8 dark:bg-gray-800 dark:text-red-400 dark:hover:bg-gray-700 " data-dismiss-target="#alert-1" aria-label="Close">
+    <span class="sr-only">Close</span>
+    <!--- Close button icon -->
+    <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+      <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+    </svg>
+  </button>
+</div>`
 
 
+const div = document.createElement('div')
+div.className="alertdiv"
+div.innerHTML=content
+document.body.appendChild(div);
+// const alertDiv = document.querySelector('');
+// console.log(alertDiv)
+waitForElement('#alert-1',(alertDiv)=>{
+
+    alertDiv.querySelector('.alert-message').textContent = message;
+    alertDiv.classList.remove('hidden', '-translate-y-full');
+    alertDiv.classList.add('flex');
+    
+    // Close the alert after 3 seconds
+    setTimeout(() => {
+      alertDiv.classList.add('hidden', '-translate-y-full');
+      alertDiv.classList.remove('flex');
+      document.body.removeChild(div)
+    }, 5000);
+    
+    
+})
+
+
+
+}
 // Function to add quick reply buttons to the email interface
 async function addReply(reply) {
     // HTML structure for the reply options
@@ -70,18 +116,29 @@ async function addReply(reply) {
 async function addEmailComposeComponent(d) {
     // HTML structure for the compose interface
     const content = `<div class="my-extension  flex items-center justify-center">
-      <div class="compose-container fade-in bg-white rounded-lg">
+      <div class=" compose-container fade-in bg-white rounded-lg">
           <div class="p-2 flex gap-4 generate-compose">
-              <span class="hover:bg-blue-500 hover:text-white text-blue-500 border border-blue-500 p-2 px-3 rounded-lg cursor-pointer reply-compose" data-prompt="Write a simple and crisp reply in less than 50 words saying yes or replying affirmatively to the other person">Rewrite ✍🏼</span>
-              <span class="text-yellow-500 hover:bg-yellow-500 hover:text-white border border-yellow-500 p-2 px-3 rounded-lg cursor-pointer reply-compose" data-prompt="Write a professional reply to follow up on the points mentioned in the previous messages">Create <span class="text-blue">✨</span></span>
+              <span class="hover:bg-blue-500 hover:text-white text-blue-500 border border-blue-500 p-2 px-3 rounded-lg cursor-pointer reply-compose group" data-prompt="Write a simple and crisp reply in less than 50 words saying yes or replying affirmatively to the other person">Rewrite ✍🏼
+               <span class="absolute -top-6 hidden group-hover:flex items-center justify-center bg-gray-800 text-white text-xs rounded px-2 py-1">
+                    Rewrite the email in the email body.
+                </span>
+              
+              </span>
+
+              <span class="text-yellow-500 hover:bg-yellow-500 hover:text-white border border-yellow-500 p-2 px-3 rounded-lg cursor-pointer reply-compose group" data-prompt="Write a professional reply to follow up on the points mentioned in the previous messages ">Create ✨
+              
+                        <span class="absolute  -top-6 hidden group-hover:flex items-center justify-center bg-gray-800 text-white text-xs rounded px-2 py-1">
+                            Compose an email or chat with  mail.
+                        </span>
+              </span>
           </div>
           <div class="p-2 gap-2 create-compose hidden items-center align-middle bg-white rounded-lg">
               <span class="p-2 cursor-pointer back hover:bg-slate-200 rounded-lg">←</span>
               <input type="text" placeholder="Write with Ai" class="border border-blue-500 p-2 rounded-lg w-64 input-prompt">
-              <img src="https://img.icons8.com/?size=100&id=g8ltXTwIfJ1n&format=png&color=000000" class="border bg-black hover:bg-white px-3 p-2 rounded-lg cursor-pointer generate" width="22px" height="25px"/>
+              <img src="https://img.icons8.com/?size=100&id=g8ltXTwIfJ1n&format=png&color=000000" class="border bg-black hover:bg-white px-3 p-2 rounded-lg cursor-pointer generate mr-6" width="22px" height="25px"/>
           </div>
       </div>
-      <button id="toggleButton" class="p-2 m-2 rounded-full absolute bottom-0 right-0">&#x25B6;</button>
+      <button id="toggleButton" class="p-2 m-2 rounded-full absolute bottom-0 right-0 hover:bg-gray-400">&#x25B6;</button>
   </div>`;
 
     const newDiv = document.createElement('div');
@@ -156,8 +213,15 @@ async function suggestReplyForCompose(d) {
                   {your response should be within this}
                   \`\`\`
               `;
-
-                sendDataToBackgroundCompose(fullPrompt, d);
+                if(context_email.length > 0)   {
+                   
+                  
+                    sendDataToBackgroundCompose(fullPrompt, d);
+                }else{
+                    console.log("it is empyty calling the alert ")
+                    showAlert("The email body is empty, Can't rewrite")
+                }
+                
             }
         });
     });
@@ -219,7 +283,9 @@ async function suggestReplyForCompose(d) {
             const context_email = context_email_div.textContent.toString();
             prompt = input.value;
 
-            const fullPrompt =
+            let fullPrompt =""
+        if( context_email.length > 0){
+            fullPrompt =
                 `You are a helpful assistant. Your task is to generate a professional email based on the given context and user instructions. Ensure the email is clear, formal, and appropriate for professional communication. Don't give any explanation or notes.
 
             Generate an email based on the following context and instructions:
@@ -229,8 +295,23 @@ async function suggestReplyForCompose(d) {
 
             {your response should be within this}
             `;
-
             sendDataToBackgroundCompose(fullPrompt, d);
+        }
+        else{
+            fullPrompt = `
+            You are a helpful assistant. Your task is to generate a professional email based on the user's prompt. Ensure the email is clear, formal, and appropriate for professional communication.
+            
+            Generate an email based on the following user prompt:
+            
+            User's prompt: ${prompt}
+            
+            \`\`\`plaintext
+            {your response should be within this}
+            \`\`\`
+            `;
+            sendDataToBackgroundCompose(fullPrompt, d);
+            
+        }
         }
 
 
@@ -299,6 +380,13 @@ async function sendDataToBackgroundCompose(query, d) {
                     console.log(response);
                     const parsedcontent = marked.parse(response.resp);
                     message.innerHTML = parsedcontent;
+                }
+                if (response.type === "ERROR") {
+                    showAlert(response.resp)
+                    message.textContent =""
+                    console.log("error is occured while send it")
+
+                
                 }
 
                 // document.getElementById('stop-button').addEventListener('click', () => {

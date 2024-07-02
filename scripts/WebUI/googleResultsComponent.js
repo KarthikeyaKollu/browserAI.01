@@ -334,7 +334,7 @@ function showAlert(message) {
   setTimeout(() => {
     alertDiv.classList.add('hidden', '-translate-y-full');  // Hide the alert
     alertDiv.classList.remove('flex');
-  }, 3000);
+  }, 5000);
 }
 
 

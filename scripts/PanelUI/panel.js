@@ -511,7 +511,7 @@ function showAlert(message) {
   setTimeout(() => {
     alertDiv.classList.add('hidden', '-translate-y-full');
     alertDiv.classList.remove('flex');
-  }, 3000);
+  }, 5000);
 }
 
 
@@ -657,12 +657,6 @@ initScript();
 
 
 
-
-
-
-
-
-
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if (message.type === 'TEXT_SELECTED') {
      
@@ -795,8 +789,8 @@ function startMonitoring() {
         
         document.querySelector('#cpuUsage').textContent = `${usagePercent}`
   
-        // Store or use the CPU usage percentage as needed
-        chrome.storage.local.set({ cpuUsage: usagePercent });
+        // // Store or use the CPU usage percentage as needed
+        // chrome.storage.local.set({ cpuUsage: usagePercent });
       }
   
       // Store current CPU info for the next measurement
@@ -816,7 +810,7 @@ function startMonitoring() {
     });
 
     // Schedule the next update after a certain interval (e.g., 3 seconds)
-    setTimeout(updateUsage, 3000); // 3 seconds
+    setTimeout(updateUsage, 2000); // 3 seconds
   }
 
   // Start initial monitoring

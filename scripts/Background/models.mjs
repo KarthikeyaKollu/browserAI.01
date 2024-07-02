@@ -61,7 +61,7 @@ const selectedModel = await getModelFromStorage();
     port.postMessage({ type: 'FINISHED', resp: d }); // Indicate that processing is finished
   } catch (error) {
     console.log(error.message); // Log any errors
-    port.postMessage({ type: 'ERROR', resp: error.message }); // Send error message to the content script
+    port.postMessage({ type: 'ERROR', resp: error.message+" "+"models" }); // Send error message to the content script
   }
 }
 

@@ -67,7 +67,7 @@
       "matches": ["https://mail.google.com/*"],
       "js": ["lib/marked.min.js","scripts/WebUI/emailComponent.js"],
       "run_at": "document_end",
-      "css": ["output.css", "css/prism.css", "css/light.css"],
+      "css": ["css/output.css", "css/prism.css", "css/light.css"],
       "type": "module"
     }
 

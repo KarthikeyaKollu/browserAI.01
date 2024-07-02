@@ -34,7 +34,7 @@
 <!--- End of error message div -->
 
   <!-- Start of Headder div --> 
-<div class="w-full flex items-center p-4 bg-[#171717] border-b border-[#212121] " style="z-index: 999;">
+<div class="w-full flex items-center p-4 bg-[#171717] border-b border-[#212121] relative " style="z-index: 999;">
     <!-- ModelSelectbox --> 
       <select class="form-select p-2 border border-gray-300 rounded focus:outline-none w-28 md:w-36" id="model-select">
       </select>
@@ -48,16 +48,16 @@
 
       <span id="settings" class="mx-auto text-white">NOT INITIALIZED</span>
 <!-- Indicators of system status --> 
-      <div class="text-white group pr-6 space-y-2">
-        <span class="usage border border-red-300 rounded-lg p-1">
+      <div class="text-white group pr-3 space-y-2 cursor-pointer ">
+        <div class="usage border border-red-300 w-[70px] rounded-lg p-1 ">
           <span>CPU:</span> 
           <span id="cpuUsage">00.0</span>
-        </span>
-        <div class="usage border border-purple-500 rounded-lg p-1">
+        </div>
+        <div class="usage border border-purple-500 rounded-lg p-1 w-[70px] ">
           <span>RAM:</span>
           <span id="ramUsage">00.0</span>
         </div>
-        <span class="absolute -bottom-4  -right-3 mb-1 hidden group-hover:flex items-center justify-center bg-gray-800 text-white text-xs rounded px-2 py-1">
+        <span class="absolute -bottom-8  -right-3 mb-1 hidden group-hover:flex items-center justify-center bg-gray-800 text-white text-xs rounded px-2 py-1">
           CPU and RAM usage % .
       </span>
       </div>
