@@ -10,13 +10,13 @@ const notResponseString = `
 
 let API_KEY = '';
 let MODEL_ID = 'llama-3';
-
-let conversationHistory = '';
+let messages = [];
+let conversationHistory = '[no existing conversation]';
 var version = chrome.runtime.getManifest().version;
 var ollama_host = 'http://localhost:11434'
 
 var rebuildRules = undefined;
-var status_failed= false
+var status_failed = false
 if (typeof chrome !== "undefined" && chrome.runtime && chrome.runtime.id) {
   rebuildRules = async function (domain) {
     const domains = [domain];
@@ -72,7 +72,7 @@ async function postRequest(data) {
     if (!response.ok) {
       const errorData = await response.json(); // Or response.text
       showAlert(`API returned an error: ${errorData.message}`)
-     
+
     }
 
     return response; // Assuming the API returns JSON
@@ -82,7 +82,7 @@ async function postRequest(data) {
       showAlert("Request was aborted")
     } else {
       showAlert('Failed to post request ' + ollama_host + ' ')
-      
+
     }
     throw error; // Rethrow or handle as needed
   }
@@ -139,7 +139,7 @@ function updateModelInQueryString(model) {
     const newPathWithQuery = `${window.location.pathname}?${searchParams.toString()}`
     window.history.replaceState(null, '', newPathWithQuery);
   }
-  chrome.storage.local.set({ 'model': model}, () => {
+  chrome.storage.local.set({ 'model': model }, () => {
     console.log('Model updated manually to ' + model);
   });
 
@@ -156,12 +156,12 @@ async function populateModels() {
   try {
     const data = await getModels();
 
-   console.log(data)
+    console.log(data)
     const selectElement = document.getElementById('model-select');
 
 
     // set up handler for selection
-    selectElement.onchange = (() =>{
+    selectElement.onchange = (() => {
       updateModelInQueryString(selectElement.value)
     });
 
@@ -172,16 +172,16 @@ async function populateModels() {
       selectElement.appendChild(option);
     });
 
-    
 
-//  // In popup.js
-// chrome.storage.local.set({ 'model': selectElement.value }, function() {
-//   if (chrome.runtime.lastError) {
-//     console.error('Error setting model: ' + chrome.runtime.lastError.message);
-//   } else {
-//     console.log('Model updated manually to ' + selectElement.value);
-//   }
-// });
+
+    //  // In popup.js
+    // chrome.storage.local.set({ 'model': selectElement.value }, function() {
+    //   if (chrome.runtime.lastError) {
+    //     console.error('Error setting model: ' + chrome.runtime.lastError.message);
+    //   } else {
+    //     console.log('Model updated manually to ' + selectElement.value);
+    //   }
+    // });
 
 
 
@@ -214,7 +214,7 @@ async function populateModels() {
 
   }
   catch (error) {
-   
+
 
     showAlert('Unable to communitcate with Ollama: ' + error.message)
   }
@@ -232,7 +232,7 @@ const closeButton = document.getElementById('close');
 const addContextButton = document.querySelector('.input-context-button');
 async function getModelFromStorage() {
   return new Promise((resolve, reject) => {
-    chrome.storage.local.get('model', function(result) {
+    chrome.storage.local.get('model', function (result) {
       const selectedModel = result.model ? result.model.trim() : '';
       resolve(selectedModel);
     });
@@ -240,20 +240,19 @@ async function getModelFromStorage() {
 }
 // Function to handle user input and call the API functions
 async function submitRequest() {
- if(ongoing){
-  return
- }
+
+
+  
   const input = promptInput.value;
-  if(!context_prompt.classList.contains('hidden')){
+  if (!context_prompt.classList.contains('hidden')) {
     context_prompt.classList.add('hidden')
     closeButton.classList.add('hidden')
   }
 
-  if (input.length <= 0) {
-    return;
+  if (ongoing || input.length <= 0) {
+    return
   }
-  // controller.abort();
-  // controller = new AbortController();
+
 
   handleSuggestion();
   const contextInput = context_prompt.value.toString();
@@ -262,24 +261,37 @@ async function submitRequest() {
   const loading = document.getElementById('loading');
 
   const basicPrompt = buildPrompt(contextInput, input);
-console.log(selectedModel)
+  conversationHistory += `\nUSER: ${basicPrompt}\n`;
+  messages.push({ role: 'USER', content: basicPrompt });
+  // console.log(selectedModel)
+  const convoText = messages.reduce((a, message) => {
+    return `${a}### ${message.role.toUpperCase()}\n${message.content}\n\n`;
+  }, '');
 
+  const full_prompt = `Conversation: 
+          ${convoText}
+
+            As USER in the conversation above, your task is to continue the conversation. Remember, Your responses should be crafted as if you're a human conversing in a natural, realistic manner, keeping in mind the context and flow of the dialogue. Please generate a fitting response to the last message in the conversation, or if there is no existing conversation, initiate one as a normal person would.
+            
+            YourResponse:
+            `
 
   updateChatlog(chatlog, contextInput, input);
   const [chatResponse, chatResponse_div] = createChatResponseElement(chatlog);
-  console.log(chatResponse ,chatResponse_div)
-
 
  
 
 
-  if(status_failed){
+
+
+  if (status_failed) {
     loading.classList.add('hidden');
     loading.classList.remove('flex');
     console.log(status_failed)
-  }else{
+  } else {
     loading.classList.remove('hidden');
     loading.classList.add('flex');
+    ongoing=true
 
   }
 
@@ -290,32 +302,33 @@ console.log(selectedModel)
   context_prompt.value = '';
 
 
- const Model = await getModelFromStorage()
- console.log(Model)
+  const Model = await getModelFromStorage()
+  console.log(Model)
 
 
 
 
-if(!Model){
-  Model = selectedModel
-}
-if(chatlog.context || !chatlog.context ){
-  document.getElementById('model-select').disabled=true;
-  console.log("yess disabled")
-}
-  const data = { model: Model, prompt: basicPrompt, context: chatlog.context }; 
-  
+  if (!Model) {
+    Model = selectedModel
+  }
+
+  // if(chatlog.context || !chatlog.context ){
+  //   document.getElementById('model-select').disabled=true;
+  //   console.log("yess disabled")
+  // }
+  const data = { model: Model, prompt: full_prompt };
+  console.log(full_prompt)
 
   try {
     const response = await postRequest(data);
-    processResponse(response, chatlog, chatResponse, loading,chatResponse_div);
+    processResponse(response, chatlog, chatResponse, loading, chatResponse_div);
   } catch (error) {
     displayError(error, chatlog);
   }
 }
 
 function handleSuggestion() {
- 
+
   const suggestion = document.querySelector('.suggestion');
   if (!suggestion.classList.contains('hidden')) {
     suggestion.classList.add('hidden');
@@ -323,6 +336,7 @@ function handleSuggestion() {
 }
 
 function buildPrompt(contextInput, input) {
+
   if (contextInput.length > 0) {
     return `
       You are a knowledgeable assistant. Your task is to provide detailed answers to the following questions based on the provided context. Ensure your responses are clear, accurate, and tailored to each question's requirements.
@@ -331,28 +345,10 @@ function buildPrompt(contextInput, input) {
       
       Questions:
       ${input}
-      
-   
-      \`\`\`{language that is asked}
-      {your response should be within this}
-      \`\`\`
 
     `;
   } else {
-    return `
-      You are a knowledgeable assistant. Your task is to provide detailed answers to the following questions. Ensure your responses are clear, accurate, and tailored to each question's requirements.
-       
-      Questions:
-      ${input}
-      
-
-      
-       \`\`\`{language that is asked}
-      {your response should be within this}
-      \`\`\`
-      
-
-    `;
+    return `${input}`;
   }
 }
 
@@ -379,21 +375,26 @@ function updateChatlog(chatlog, contextInput, input) {
     `;
   }
   chatlog.appendChild(chatEntry);
+
+
+
+
+
 }
 
 function createChatResponseElement(chatlog) {
   const chatResponse_div = document.createElement('div');
-  chatResponse_div.classList.add('flex', 'justify-center','items-center','mb-[6%]', 'w-[80%]','glow', 'ml-[6%]','chatResponse');
+  chatResponse_div.classList.add('flex', 'justify-center', 'items-center', 'mb-[6%]', 'w-[80%]', 'glow', 'ml-[6%]', 'chatResponse');
   const chatResponse = document.createElement('div');
-  chatResponse.classList.add('bg-[#333333]', 'p-4', 'rounded-tl-lg', 'rounded-tr-lg', 'rounded-br-lg', 'w-[100%]', 'fade-in','text-white');
+  chatResponse.classList.add('bg-[#333333]', 'p-4', 'rounded-tl-lg', 'rounded-tr-lg', 'rounded-br-lg', 'w-[100%]', 'fade-in', 'text-white');
   chatResponse_div.classList.add('hidden'); // Initially hidden
   chatResponse.id = "response_llm";
   chatResponse_div.appendChild(chatResponse);
   chatlog.appendChild(chatResponse_div);
-  return [chatResponse,chatResponse_div];
+  return [chatResponse, chatResponse_div];
 }
 var ongoing = false;
-async function processResponse(response, chatlog, chatResponse, loading,chatResponse_div) {
+async function processResponse(response, chatlog, chatResponse, loading, chatResponse_div) {
   let data_p = '';
   await getResponse(response, parsedResponse => {
     let word = parsedResponse.response;
@@ -412,9 +413,11 @@ async function processResponse(response, chatlog, chatResponse, loading,chatResp
     chatResponse_div.classList.remove('hidden'); // Show response after processing
   });
   console.log("done generating")
+  conversationHistory += `\nSYSTEM: ${data_p}\n`;
+  messages.push({ role: 'SYSYTEM', content: data_p });
   document.getElementById('stop-button').classList.add('hidden'); // Hide the stop button after the request completes
   document.getElementById('submit').classList.remove('hidden');
-  ongoing=false
+  ongoing = false
   chatResponse.innerHTML = marked.parse(data_p);
   console.log(data_p)
   console.log(marked.parse(data_p))
@@ -423,32 +426,32 @@ async function processResponse(response, chatlog, chatResponse, loading,chatResp
 
 }
 
-function displayError(error, chatlog) {
-
-}
 
 
 
 
-// function sendToContent(message) {
-//   chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-//     const activeTab = tabs[0];
-//     // Send a message to the content script in the active tab
-//     chrome.tabs.sendMessage(activeTab.id, { rewrite: message }, (response) => {
-//       console.log(response);
-//     });
-//   });
-// }
 
 
-addContextButton.addEventListener('click',()=>{
-  if(context_prompt.classList.contains('hidden')){
+addContextButton.addEventListener('click', () => {
+  if (context_prompt.classList.contains('hidden')) {
     context_prompt.classList.remove('hidden')
     closeButton.classList.remove('hidden')
   }
 })
 submitButton.addEventListener('click', async () => {
   submitRequest();
+});
+// Scroll to bottom of chat log when Enter key is pressed
+promptInput.addEventListener('keydown', function (event) {
+  if (event.key === 'Enter') {
+    event.preventDefault(); // Prevent the default newline behavior
+
+    // Your existing logic for submitting the chat message goes here
+    submitRequest()
+    // Scroll to the bottom of the chat log
+    var chatLog = document.getElementById('chatlog');
+    chatLog.scrollTop = chatLog.scrollHeight;
+  }
 });
 closeButton.addEventListener('click', async () => {
   context_prompt.classList.add('hidden')
@@ -458,37 +461,37 @@ closeButton.addEventListener('click', async () => {
 
 document.getElementById('stop-button').addEventListener('click', () => {
   showAlert("Response it aborted By the user")
-  status_failed=true
-  ongoing=false
+  status_failed = true
+  ongoing = false
   // Abort the ongoing request
   controller.abort();
   controller = new AbortController();
   const response_llm = document.querySelectorAll("#response_llm");
   const chatResponse_div = document.querySelectorAll('.chatResponse')
   // console.log(response_llm[response_llm.length -1])
-  let currResp =chatResponse_div[chatResponse_div.length -1]
+  let currResp = chatResponse_div[chatResponse_div.length - 1]
 
-  
+
   currResp.classList.remove('glow')
   currResp.classList.add('remove-glow')
   document.getElementById('stop-button').classList.add('hidden'); // Hide the stop button
-  document.getElementById('submit').classList.remove('hidden'); 
-  
+  document.getElementById('submit').classList.remove('hidden');
+
   // const loading = document.getElementById('loading');
   // loading.classList.add('hidden');
   // loading.classList.remove('flex');
-  
-  
+
+
 });
 
 document.addEventListener('DOMContentLoaded', function () {
   const alertDiv = document.getElementById('alert-1');
- 
+
   const closeButton = alertDiv.querySelector('button[data-dismiss-target]');
 
   closeButton.addEventListener('click', function () {
     alertDiv.classList.remove('hidden')
-    
+
     alertDiv.classList.add('-translate-y-full');
     setTimeout(() => {
       alertDiv.classList.add('hidden');
@@ -515,18 +518,7 @@ function showAlert(message) {
 }
 
 
-// Scroll to bottom of chat log when Enter key is pressed
-promptInput.addEventListener('keydown', function (event) {
-  if (event.key === 'Enter') {
-    event.preventDefault(); // Prevent the default newline behavior
 
-    // Your existing logic for submitting the chat message goes here
-    submitRequest()
-    // Scroll to the bottom of the chat log
-    var chatLog = document.getElementById('chatlog');
-    chatLog.scrollTop = chatLog.scrollHeight;
-  }
-});
 
 // MutationObserver to detect changes in the chat log and scroll to the bottom
 var chatLog = document.getElementById('chatlog');
@@ -554,7 +546,7 @@ function checkVisibilityAndStartObserver() {
 }
 
 // Event listener for user scrolling
-chatLog.addEventListener('scroll', function() {
+chatLog.addEventListener('scroll', function () {
   checkVisibilityAndStartObserver();
 });
 
@@ -600,14 +592,14 @@ suggestions.forEach(suggestion => {
 
 function updateSettingString() {
   const chatlog = document.getElementById('chatlog');
-  if(chatLog && chatlog.context){
-     
-        showAlert("Please reload BrowserAI to apply updates and ensure smooth operation.")
+  // if(chatLog && chatlog.context){
 
-  }
+  //       showAlert("Please reload BrowserAI to apply updates and ensure smooth operation.")
+
+  // }
   settings.innerHTML = '' + ollama_host.split("//")[1];
 
-  
+
 }
 
 // Theme updates from options page
@@ -624,7 +616,7 @@ chrome.storage.onChanged.addListener(function (changes, namespace) {
 // window.open(chrome.runtime.getURL('options.html'));
 function applyTheme(theme) {
   var themeStyle = document.getElementById('theme');
-if (theme == 'dark') {
+  if (theme == 'dark') {
     themeStyle.href = 'css/dark.css';
   } else {
     themeStyle.href = 'css/light.css';
@@ -659,26 +651,26 @@ initScript();
 
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if (message.type === 'TEXT_SELECTED') {
-     
-      context_prompt.classList.remove('hidden');
-      context_prompt.value = message.text.toString();
-      closeButton.classList.remove('hidden')
+
+    context_prompt.classList.remove('hidden');
+    context_prompt.value = message.text.toString();
+    closeButton.classList.remove('hidden')
   }
-  if(message.type==="FOLLOWUP"){
-    
+  if (message.type === "FOLLOWUP") {
 
-      context_prompt.classList.remove('hidden');
-      context_prompt.value = message.text;
-      closeButton.classList.remove('hidden')
-      console.log("loaded")
-  
-   
-    
+
+    context_prompt.classList.remove('hidden');
+    context_prompt.value = message.text;
+    closeButton.classList.remove('hidden')
+    console.log("loaded")
+
+
+
   }
 
 
 
-   
+
 });
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -695,9 +687,9 @@ document.addEventListener('DOMContentLoaded', () => {
           const codeElement = pre.querySelector('code');
 
           if (codeElement && codeElement.classList.length > 0) {
-                       
-              var lang = codeElement.classList[0].split("-")[1];
-              lang = lang.charAt(0).toUpperCase() + lang.slice(1);
+
+            var lang = codeElement.classList[0].split("-")[1];
+            lang = lang.charAt(0).toUpperCase() + lang.slice(1);
 
             // adding that copy and language name div above the <pre></pre> tag
             var toolbar = document.createElement("div");
@@ -734,13 +726,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
               });
             }
-          }else{
+          } else {
             let pElement = document.createElement('p');
             pElement.textContent = pre.textContent;
             pre.parentNode.replaceChild(pElement, pre);
 
           }
-          
+
         });
       }
     });
@@ -773,30 +765,30 @@ function startMonitoring() {
         let totalActiveTime = 0;
         let previousTotalCpuTime = 0;
         let previousTotalActiveTime = 0;
-  
+
         cpuInfo.processors.forEach((processor, index) => {
           const { user, kernel, idle, total } = processor.usage;
           const { user: prevUser, kernel: prevKernel, idle: prevIdle, total: prevTotal } = previousCpuInfo.processors[index].usage;
-  
+
           totalCpuTime += (total - prevTotal);
           totalActiveTime += ((user - prevUser) + (kernel - prevKernel));
           previousTotalCpuTime += (prevTotal - prevIdle);
           previousTotalActiveTime += ((prevUser - prevIdle) + (prevKernel - prevIdle));
         });
-  
+
         // Calculate the percentage of CPU usage
         const usagePercent = ((totalActiveTime / totalCpuTime) * 100).toFixed(1);
-        
+
         document.querySelector('#cpuUsage').textContent = `${usagePercent}`
-  
+
         // // Store or use the CPU usage percentage as needed
         // chrome.storage.local.set({ cpuUsage: usagePercent });
       }
-  
+
       // Store current CPU info for the next measurement
       previousCpuInfo = cpuInfo;
     });
-    
+
 
     chrome.system.memory.getInfo((memoryInfo) => {
 

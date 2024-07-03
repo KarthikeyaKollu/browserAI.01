@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Orian (Ollama WebUI)",
-  "version": "0.6",
+  "version": "1.0",
   "description": "Quick access to your favorite local LLM from your browser (Ollama).",
   "icons": {
     "16":"assets/logo.png",
@@ -28,7 +28,6 @@
      "tabs",
      "system.cpu",
     "system.memory",
-    "alarms",
     "commands"
   ],
   "background": {
@@ -60,7 +59,7 @@
       "matches": ["https://www.google.com/*"],
       "js": ["lib/marked.min.js", "lib/prism.js","scripts/WebUI/googleResultsComponent.js"],
       "run_at": "document_end",
-      "css": ["output.css", "css/prism.css", "css/light.css"],
+      "css": ["css/output.css", "css/prism.css", "css/light.css"],
       "type": "module"
     },
     {
