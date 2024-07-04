@@ -156,7 +156,7 @@ async function populateModels() {
   try {
     const data = await getModels();
 
-    console.log(data)
+
     const selectElement = document.getElementById('model-select');
 
 
@@ -241,8 +241,12 @@ async function getModelFromStorage() {
 // Function to handle user input and call the API functions
 async function submitRequest() {
 
+  if (isEditing) {
+    deleteFromIndex(parentElementID, toIndex, sibling)
+  } else {
+    console.log("not editing")
+  }
 
-  
   const input = promptInput.value;
   if (!context_prompt.classList.contains('hidden')) {
     context_prompt.classList.add('hidden')
@@ -263,7 +267,7 @@ async function submitRequest() {
   const basicPrompt = buildPrompt(contextInput, input);
   conversationHistory += `\nUSER: ${basicPrompt}\n`;
   messages.push({ role: 'USER', content: basicPrompt });
-  // console.log(selectedModel)
+
   const convoText = messages.reduce((a, message) => {
     return `${a}### ${message.role.toUpperCase()}\n${message.content}\n\n`;
   }, '');
@@ -279,7 +283,7 @@ async function submitRequest() {
   updateChatlog(chatlog, contextInput, input);
   const [chatResponse, chatResponse_div] = createChatResponseElement(chatlog);
 
- 
+
 
 
 
@@ -287,11 +291,11 @@ async function submitRequest() {
   if (status_failed) {
     loading.classList.add('hidden');
     loading.classList.remove('flex');
-    console.log(status_failed)
+
   } else {
     loading.classList.remove('hidden');
     loading.classList.add('flex');
-    ongoing=true
+    ongoing = true
 
   }
 
@@ -303,7 +307,7 @@ async function submitRequest() {
 
 
   const Model = await getModelFromStorage()
-  console.log(Model)
+
 
 
 
@@ -367,32 +371,207 @@ function updateChatlog(chatlog, contextInput, input) {
     `;
   } else {
     chatEntry.innerHTML = `
-      <div class="w-[95%] flex justify-end mb-6 fade-in">
-        <span type="text" id="prompt" placeholder="Ask a follow-up" class="fade-in bg-[#009afd]  text-end p-2 px-4 test-white rounded-bl-lg text-white rounded-tr-lg text-lg rounded-tl-lg max-w-[90%]">
+    <div>
+      <div class="w-[95%] flex justify-end mb-6 fade-in group  countForEditing" id= "${countForEditing}" >
+      <button class="edit-button">
+      <img src="https://img.icons8.com/?size=100&id=sP6dvxdjJWj5&format=png&color=FFFFFF" class="w-8  mr-2 p-2 hover:bg-slate-600 hidden group-hover:flex text-white rounded-lg"/>
+       
+      </button>
+         <button class="cancel-edit">
+       <img src="https://img.icons8.com/?size=100&id=3062&format=png&color=FFFFFF" class="w-8  mr-2 p-2 hover:bg-slate-600 hidden  text-white rounded-lg"/>
+       
+      </button>
+
+
+        <span type="text" id="prompt" placeholder="Ask a follow-up" class="fade-in bg-[#009afd]  text-end p-2 px-4 test-white rounded-bl-lg text-white rounded-tr-lg text-lg rounded-tl-lg max-w-[90%] m-2">
           ${input}
         </span>
+        
       </div>
+    </div>
     `;
   }
+  countForEditing += 2;
   chatlog.appendChild(chatEntry);
+  console.log("New elemtn id",countForEditing)
+  const cancelEdit = chatEntry.querySelector('.cancel-edit')
+  const edit = chatEntry.querySelector('.edit-button')
+
+  edit.addEventListener("click", (event) => {
+    edit.querySelector('img').classList.remove('group-hover:flex')
+    cancelEdit.querySelector('img').classList.remove('hidden')
+    event.target.parentElement.parentElement.parentElement.classList.add('bg-blue-500', 'bg-opacity-30',"rounded-lg")
+    isEditing = true
+    promptInput.value = input
+    parentElementID = event.target.parentElement.parentElement.id
+    parentElementID =chatEntry.querySelector('.countForEditing').id
+    console.log(parentElementID)
+    sibling = chatEntry.nextElementSibling;
+    // Clear chatlog visually after editing
+    while (sibling) {
+      let nextSibling = sibling.nextElementSibling;
+      // chatlog.removeChild(sibling);
+      sibling = nextSibling;
+      toIndex++;
+
+    }
+   
+    sibling = chatEntry.nextElementSibling;
+  });
+
+  cancelEdit.addEventListener("click", (event) => {
+    edit.querySelector('img').classList.add('group-hover:flex')
+    cancelEdit.querySelector('img').classList.add('hidden')
+    event.target.parentElement.parentElement.parentElement.classList.remove('bg-blue-500', 'bg-opacity-50',"rounded-lg")
+    promptInput.value = ""
+    countForEditing = parseInt(parentElementID, 10)
+    toIndex = 0
+    parentElementID = 0
+    isEditing = false
+
+  });
+
+}
+
+
+let countForEditing = 0
+let toIndex = 0
+let sibling = ""
+let parentElementID = 0
+let isEditing = false
+
+function deleteFromIndex(s, e, sibling) {
+
+  //  chatlog.remove(sibling.previousElementSibling)
+
+  removeElements(messages, s, e)
+
+  let count = 0
+  let tempSibling = sibling
+  while (sibling && count < e) {
+    let nextSibling = sibling.nextElementSibling;
+    chatlog.removeChild(sibling);
+    sibling = nextSibling;
+    count++;  // Move to the next index
+  }
+
+  console.log(s)
+  let elementToRemove = document.getElementById(`${s}`);//parent elemtn
+
+  if (elementToRemove) {
+    elementToRemove.parentNode.removeChild(elementToRemove);
+  } else {
+    console.error('Element not found!');
+  }
+
+
+
+  // resetting the values
+  countForEditing =parseInt(parentElementID, 10)
+  toIndex = 0
+  parentElementID = 0
+  isEditing = false
+}
 
 
 
 
+function removeElements(array, index, count) {
+  // Check if index is within valid range
+  if (index < 0 || index >= array.length) {
+    console.error('Invalid index provided.');
+    return;
+  }
+  console.log(parentElementID, " ", count)
+  // Remove 'count' elements starting from 'index'
+  array.splice(parentElementID, count + 1);
+  messages = array
 
+  return array;
 }
 
 function createChatResponseElement(chatlog) {
   const chatResponse_div = document.createElement('div');
   chatResponse_div.classList.add('flex', 'justify-center', 'items-center', 'mb-[6%]', 'w-[80%]', 'glow', 'ml-[6%]', 'chatResponse');
+  
+  // Creating chatResponse element
   const chatResponse = document.createElement('div');
   chatResponse.classList.add('bg-[#333333]', 'p-4', 'rounded-tl-lg', 'rounded-tr-lg', 'rounded-br-lg', 'w-[100%]', 'fade-in', 'text-white');
-  chatResponse_div.classList.add('hidden'); // Initially hidden
   chatResponse.id = "response_llm";
   chatResponse_div.appendChild(chatResponse);
+  
+  // Adding menu with buttons
+  const menu = document.createElement('span');
+  menu.innerHTML = ` 
+    <div class="items-center justify-center hidden absolute -bottom-8 left-4 menu-group">
+      <button class="regenerate-button">
+        <img src="https://img.icons8.com/?size=100&id=59872&format=png&color=FFFFFF" class="w-8 p-2 hover:bg-slate-600 text-white rounded-lg"/>
+      </button>
+      <button class="copy-btn">
+        <img src="https://img.icons8.com/?size=100&id=pNYOTp5DinZ3&format=png&color=FFFFFF" class="w-8 p-2 hover:bg-slate-600 text-white rounded-lg"/>
+      </button>   
+    </div>
+  `;
+
+  chatResponse_div.appendChild(menu);
+
+  // Adding classes for initial state (hidden, group, relative)
+  chatResponse_div.classList.add('hidden', 'group', 'relative');
+
+  // Append chatResponse_div to chatlog
   chatlog.appendChild(chatResponse_div);
+
+  // Event handler for copy button
+  async function handleCopy(event) {
+
+
+    // Change icon URL
+    const copyButton = event.currentTarget.querySelector('img');
+    copyButton.src = 'https://img.icons8.com/?size=100&id=KLD9V6A735yg&format=png&color=FFFFFF';
+
+    // Revert icon after 3 seconds
+    setTimeout(function() {
+      copyButton.src = 'https://img.icons8.com/?size=100&id=pNYOTp5DinZ3&format=png&color=FFFFFF';
+    }, 3000);
+
+    const content =chatResponse.innerText || chatResponse.textContent;
+    try {
+      // Use the Clipboard API to write the content to the clipboard
+      await navigator.clipboard.writeText(content);
+      // Optional: Provide feedback to the user
+      copyButton.textContent = 'Copied!';
+    } catch (err) {
+      console.error('Failed to copy: ', err);
+    }
+
+   
+  }
+
+  // Event handler for regenerate button
+  function handleRegenerate(event) {
+    // Handle cancel edit button click
+    console.log('regenrate clicked Edit clicked!');
+
+    const actualElement = event.target.parentElement.parentElement.parentElement.parentElement;
+
+   console.log(actualElement)
+
+   const prevElement = actualElement.previousElementSibling
+   const btn = prevElement.querySelector('.edit-button')
+   console.log(btn)
+     
+   btn.click()
+   submitRequest()
+    
+  }
+
+  // Attach event listeners
+  chatResponse_div.querySelector('.copy-btn').addEventListener('click', handleCopy);
+  chatResponse_div.querySelector('.regenerate-button').addEventListener('click', handleRegenerate);
+
   return [chatResponse, chatResponse_div];
 }
+
 var ongoing = false;
 async function processResponse(response, chatlog, chatResponse, loading, chatResponse_div) {
   let data_p = '';
@@ -412,20 +591,17 @@ async function processResponse(response, chatlog, chatResponse, loading, chatRes
     loading.classList.remove('flex');
     chatResponse_div.classList.remove('hidden'); // Show response after processing
   });
-  console.log("done generating")
+  console.log("done generating..........")
   conversationHistory += `\nSYSTEM: ${data_p}\n`;
   messages.push({ role: 'SYSYTEM', content: data_p });
   document.getElementById('stop-button').classList.add('hidden'); // Hide the stop button after the request completes
   document.getElementById('submit').classList.remove('hidden');
-  ongoing = false
+  chatResponse_div.querySelector('.menu-group').classList.add('group-hover:flex')
   chatResponse.innerHTML = marked.parse(data_p);
-  console.log(data_p)
-  console.log(marked.parse(data_p))
   Prism.highlightAllUnder(chatResponse);
   chatResponse_div.classList.remove('glow');
-
+  ongoing = false
 }
-
 
 
 
@@ -468,8 +644,11 @@ document.getElementById('stop-button').addEventListener('click', () => {
   controller = new AbortController();
   const response_llm = document.querySelectorAll("#response_llm");
   const chatResponse_div = document.querySelectorAll('.chatResponse')
+  const chatResponse = document.querySelector('.chatResponse')
+  chatResponse.querySelector('.menu-group').classList.add('group-hover:flex')
   // console.log(response_llm[response_llm.length -1])
   let currResp = chatResponse_div[chatResponse_div.length - 1]
+
 
 
   currResp.classList.remove('glow')
@@ -483,6 +662,8 @@ document.getElementById('stop-button').addEventListener('click', () => {
 
 
 });
+
+
 
 document.addEventListener('DOMContentLoaded', function () {
   const alertDiv = document.getElementById('alert-1');
@@ -503,9 +684,13 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 
+
+
+
+
 function showAlert(message) {
   const alertDiv = document.querySelector('#alert-1');
-  console.log(alertDiv);
+
   alertDiv.querySelector('.alert-message').textContent = message;
   alertDiv.classList.remove('hidden', '-translate-y-full');
   alertDiv.classList.add('flex');
@@ -557,12 +742,12 @@ checkVisibilityAndStartObserver();
 
 const suggestions = document.querySelectorAll('.suggestions');
 // const promptInput = document.getElementById('prompt');
-console.log(suggestions)
+
 // home buttons suggestion prompts/ example prompts
 suggestions.forEach(suggestion => {
   suggestion.addEventListener('click', () => {
     if (suggestion.textContent.includes("webpage")) {
-      console.log("clicked cjat with website")
+      console.log("clicked chat with website")
       chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
         // Send a message to the content script
         chrome.tabs.sendMessage(tabs[0].id, { action: "getText" }, function (response) {
@@ -570,7 +755,6 @@ suggestions.forEach(suggestion => {
             console.error(chrome.runtime.lastError);
             showAlert("This Feature is not supported or Reload the webpage ")
           } else {
-            console.log(response);
             //promptInput.value = response.textContent;
             context_prompt.classList.remove('hidden');
             context_prompt.value = response.textContent;
@@ -580,7 +764,6 @@ suggestions.forEach(suggestion => {
       });
 
     } else {
-      console.log(suggestion.textContent.trim())
       promptInput.value = suggestion.textContent.trim();
     }
     submitRequest();

@@ -42,10 +42,10 @@
 .remove-glow::before{
   content: '';
   position: absolute;
-  top: -5px;
-  left: -5px;
-  right: -5px;
-  bottom: -5px;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
   z-index: -1;
   background: rgb(195, 45, 45);
   background-size: 400% 400%;
