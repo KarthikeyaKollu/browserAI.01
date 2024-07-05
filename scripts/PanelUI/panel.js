@@ -345,9 +345,9 @@ function buildPrompt(contextInput, input) {
     return `
       You are a knowledgeable assistant. Your task is to provide detailed answers to the following questions based on the provided context. Ensure your responses are clear, accurate, and tailored to each question's requirements.
       
-      Context: ${contextInput}
+       ##Context: ${contextInput}
       
-      Questions:
+      ##Questions:
       ${input}
 
     `;
@@ -360,19 +360,34 @@ function updateChatlog(chatlog, contextInput, input) {
   const chatEntry = document.createElement('div');
   if (contextInput.length > 0) {
     chatEntry.innerHTML = `
-      <div class="w-[90%] items-center p-2 bg-[#009afd] border border-gray-300 mx-auto rounded-bl-lg rounded-tr-lg rounded-tl-lg mb-4 fade-in">
-        <div class="w-full min-h-20 px-3 py-2 rounded-md bg-black text-white resize-none border overflow-auto max-h-40 glow">
+     <div>
+     
+     <div class="countForEditing group flex  justify-end w-[95%]" id= "${countForEditing}">
+       <div>
+       <button class="edit-button">
+      <img src="https://img.icons8.com/?size=100&id=sP6dvxdjJWj5&format=png&color=FFFFFF" class="w-8  mr-2 p-2 hover:bg-slate-600 hidden group-hover:flex text-white rounded-lg"/>
+       
+      </button>
+         <button class="cancel-edit">
+       <img src="https://img.icons8.com/?size=100&id=3062&format=png&color=FFFFFF" class="w-8  mr-2 p-2 hover:bg-slate-600 hidden  text-white rounded-lg"/>
+       
+      </button>
+       </div>
+      <div class="max-w-[90%] m-2 p-2 bg-[#009afd] border border-gray-300  rounded-bl-lg rounded-tr-lg rounded-tl-lg mb-4 fade-in">
+        <div class="w-full mx-auto min-h-20 px-3 py-2 rounded-md bg-black text-white resize-none border overflow-auto max-h-40 glow mb-2" >
           ${contextInput}
         </div> 
         <div class="w-full flex-grow text-white  mr-3 pl-1  text-lg fade-in">
           ${input}
         </div>
       </div>
+     </div>
+     </div>
     `;
   } else {
     chatEntry.innerHTML = `
     <div>
-      <div class="w-[95%] flex justify-end mb-6 fade-in group  countForEditing" id= "${countForEditing}" >
+      <div class="w-[95%]  flex justify-end items-start mb-6 fade-in group  countForEditing" id= "${countForEditing}" >
       <button class="edit-button">
       <img src="https://img.icons8.com/?size=100&id=sP6dvxdjJWj5&format=png&color=FFFFFF" class="w-8  mr-2 p-2 hover:bg-slate-600 hidden group-hover:flex text-white rounded-lg"/>
        
@@ -383,9 +398,9 @@ function updateChatlog(chatlog, contextInput, input) {
       </button>
 
 
-        <span type="text" id="prompt" placeholder="Ask a follow-up" class="fade-in bg-[#009afd]  text-end p-2 px-4 test-white rounded-bl-lg text-white rounded-tr-lg text-lg rounded-tl-lg max-w-[90%] m-2">
+        <p type="text" id="prompt" placeholder="Ask a follow-up" class="fade-in bg-[#009afd] text-left  p-2 px-4 test-white rounded-bl-lg text-white rounded-tr-lg text-lg rounded-tl-lg max-w-[90%] m-1 overflow-hidden">
           ${input}
-        </span>
+        </p>
         
       </div>
     </div>
@@ -403,6 +418,16 @@ function updateChatlog(chatlog, contextInput, input) {
     event.target.parentElement.parentElement.parentElement.classList.add('bg-blue-500', 'bg-opacity-30',"rounded-lg")
     isEditing = true
     promptInput.value = input
+    console.log(context_prompt.value.toString())
+    if(contextInput.length > 0){
+      console.log("Editing with contex")
+      context_prompt.classList.remove('hidden');
+      context_prompt.value=contextInput
+      closeButton.classList.remove('hidden')
+      
+    }else{
+      console.log("Not with context")
+    }
     parentElementID = event.target.parentElement.parentElement.id
     parentElementID =chatEntry.querySelector('.countForEditing').id
     console.log(parentElementID)
@@ -424,6 +449,15 @@ function updateChatlog(chatlog, contextInput, input) {
     cancelEdit.querySelector('img').classList.add('hidden')
     event.target.parentElement.parentElement.parentElement.classList.remove('bg-blue-500', 'bg-opacity-50',"rounded-lg")
     promptInput.value = ""
+    if(contextInput.length > 0){
+      console.log("Editing with contex")
+      context_prompt.classList.add('hidden');
+      context_prompt.value=""
+      closeButton.classList.add('hidden')
+      
+    }else{
+      console.log("Not with context")
+    }
     countForEditing = parseInt(parentElementID, 10)
     toIndex = 0
     parentElementID = 0
@@ -496,7 +530,7 @@ function createChatResponseElement(chatlog) {
   
   // Creating chatResponse element
   const chatResponse = document.createElement('div');
-  chatResponse.classList.add('bg-[#333333]', 'p-4', 'rounded-tl-lg', 'rounded-tr-lg', 'rounded-br-lg', 'w-[100%]', 'fade-in', 'text-white');
+  chatResponse.classList.add('bg-[#333333]', 'p-4', 'rounded-tl-lg', 'rounded-tr-lg', 'rounded-br-lg', 'w-[100%]', 'fade-in', 'text-white','overflow-hidden');
   chatResponse.id = "response_llm";
   chatResponse_div.appendChild(chatResponse);
   
@@ -597,6 +631,7 @@ async function processResponse(response, chatlog, chatResponse, loading, chatRes
   document.getElementById('stop-button').classList.add('hidden'); // Hide the stop button after the request completes
   document.getElementById('submit').classList.remove('hidden');
   chatResponse_div.querySelector('.menu-group').classList.add('group-hover:flex')
+  chatResponse.classList.add('shine')
   chatResponse.innerHTML = marked.parse(data_p);
   Prism.highlightAllUnder(chatResponse);
   chatResponse_div.classList.remove('glow');

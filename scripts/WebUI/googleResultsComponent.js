@@ -2,10 +2,26 @@ function delay(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
 
+// Get the body element
+const bodyElement = document.body;
 
+// Get the computed styles of the body element
+const computedStyles = window.getComputedStyle(bodyElement);
+
+// Log the current box-sizing property value
+console.log("box-sizing:", computedStyles.getPropertyValue("box-sizing"));
+
+// Set the box-sizing property value to content-box
+bodyElement.style.boxSizing = "content-box";
+
+// Verify the change
+console.log("Updated box-sizing:", bodyElement.style.boxSizing);
 
 
 async function googleSearchComponent() {
+
+
+
 
   const content = ` 
     <div class="my-extension w-96">
@@ -38,7 +54,7 @@ async function googleSearchComponent() {
   
   
   
-                <div class="text-white text-md" id="container">
+                <div class="text-white text-md rounded-lg p-2" id="container">
   
                 </div>
   
@@ -78,6 +94,7 @@ async function googleSearchComponent() {
 
   showSummary(content);
   sendDataToBackground_Search(document.querySelector('#APjFqb').value)
+ 
 }
 /**
  * Adds the provided HTML content to the #rhs element or its container.
@@ -106,7 +123,6 @@ function showSummary(content) {
 
 
 function sendDataToBackground_Search(query) {
-
 
   const live_search = false;
   let fullPrompt = ''
@@ -180,18 +196,24 @@ function sendDataToBackground_Search(query) {
       port.postMessage({ status: true ,type:"STREAM"});
     } else if (response.type === 'FINISHED') {
 
-      console.log(container.innerHTML);
-      const parsedContent = marked.parse(response.resp);
-      console.log(parsedContent);
        
+      const parsedContent = marked.parse(response.resp);
+      
+      console.log(parsedContent);
       container.innerHTML = parsedContent;
+  
+      container.classList.add('shine','overflow-hidden','fade-in')
+
+      
       document.getElementById('stop-button').classList.add('hidden');
       document.getElementById('reload-button').classList.remove('hidden');
 
       await delay(700)
       console.log(document.querySelectorAll('pre'))
+      bodyElement.style.boxSizing = "content-box";
+      console.log("box-sizing:", computedStyles.getPropertyValue("box-sizing"));
       addCopyButtonsAndClasses(document.querySelectorAll('pre'));
-
+     
       // Ensure Prism.js highlighting is applied after content update
       const observer = new MutationObserver((mutations) => {
         mutations.forEach(mutation => {
@@ -205,16 +227,9 @@ function sendDataToBackground_Search(query) {
       // Initial call to handle any existing content
       // a
 
-
-
-
-
-
-      
-    }
+     }
     
   });
-
 
 
   document.getElementById('stop-button').addEventListener('click', () => {
@@ -312,6 +327,9 @@ const addCopyButtonsAndClasses = (nodes) => {
  * directly from the webpage.
  */
 googleSearchComponent() 
+
+
+
 
 /**
  * Displays an alert message on the screen.

@@ -4,29 +4,28 @@
   "version": "1.0",
   "description": "Quick access to your favorite local LLM from your browser (Ollama).",
   "icons": {
-    "16":"assets/logo.png",
-    "48":"assets/logo.png",
+    "16": "assets/logo.png",
+    "48": "assets/logo.png",
     "128": "assets/logo.png"
-  },"commands": {
-  "open_side_panel": {
-    "suggested_key": {
-     "default": "Ctrl+Shift+Left",
+  },
+  "commands": {
+    "open_side_panel": {
+      "suggested_key": {
+        "default": "Ctrl+Shift+Left",
         "mac": "Command+Shift+Left"
-    },
-    "description": "Open side panel"
-  }
-},
-  
-
+      },
+      "description": "Open side panel"
+    }
+  },
   "permissions": [
     "storage",
     "sidePanel",
     "contextMenus",
     "declarativeNetRequest",
-     "scripting",
-     "activeTab",
-     "tabs",
-     "system.cpu",
+    "scripting",
+    "activeTab",
+    "tabs",
+    "system.cpu",
     "system.memory",
     "commands"
   ],
@@ -40,7 +39,6 @@
     "https://localhost:11434/api/tags",
     "https://localhost:11434/api/generate"
   ],
-  
   "side_panel": {
     "default_path": "panel.html",
     "openPanelOnActionClick": true
@@ -50,29 +48,47 @@
   },
   "content_scripts": [
     {
-      "matches": ["<all_urls>"],
-      "js": ["scripts/WebUI/selection.js"],
+      "matches": [
+        "<all_urls>"
+      ],
+      "js": [
+        "scripts/WebUI/selection.js"
+      ],
       "run_at": "document_end",
       "type": "module"
     },
     {
-      "matches": ["https://www.google.com/*"],
-      "js": ["lib/marked.min.js", "lib/prism.js","scripts/WebUI/googleResultsComponent.js"],
+      "matches": [
+        "https://www.google.com/*"
+      ],
+      "js": [
+        "lib/marked.min.js",
+        "lib/prism.js",
+        "scripts/WebUI/googleResultsComponent.js"
+      ],
       "run_at": "document_end",
-      "css": ["css/output.css", "css/prism.css", "css/light.css"],
+      "css": [
+        "output.css",
+        "css/prism.css",
+        "css/light.css"
+      ],
       "type": "module"
     },
     {
-      "matches": ["https://mail.google.com/*"],
-      "js": ["lib/marked.min.js","scripts/WebUI/emailComponent.js"],
+      "matches": [
+        "https://mail.google.com/*"
+      ],
+      "js": [
+        "lib/marked.min.js",
+        "scripts/WebUI/emailComponent.js"
+      ],
       "run_at": "document_end",
-      "css": ["css/output.css", "css/prism.css", "css/light.css"],
+      "css": [
+        "output.css",
+        "css/prism.css",
+        "css/light.css"
+      ],
       "type": "module"
     }
-
-
   ]
-  
-  
 }
-
