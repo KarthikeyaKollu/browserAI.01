@@ -22,9 +22,7 @@
     "sidePanel",
     "contextMenus",
     "declarativeNetRequest",
-    "scripting",
     "activeTab",
-    "tabs",
     "system.cpu",
     "system.memory",
     "commands"

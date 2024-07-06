@@ -44,7 +44,7 @@ const selectedModel = await getModelFromStorage();
  console.log(selectedModel)
   const data = { model: selectedModel, prompt: query }; // Data to send to the LLM
   let d = ''; // Variable to store the accumulated response
-
+  port.postMessage({type: 'MODEL',model:selectedModel})
   try {
     const response = await postRequest(data); // Send request to LLM
     await getResponse(response, parsedResponse => {
@@ -52,16 +52,24 @@ const selectedModel = await getModelFromStorage();
       if (word !== undefined) {
         console.log(word);
         d += word; // Accumulate the response
-        port.postMessage({ type: 'WORD', resp: word });
+        port.postMessage({ type: 'WORD', resp: word })
 
    
       }
     });
-    port.postMessage({ type: 'WORD', resp: d }); // Send the complete response
+
     port.postMessage({ type: 'FINISHED', resp: d }); // Indicate that processing is finished
   } catch (error) {
     console.log(error.message); // Log any errors
-    port.postMessage({ type: 'ERROR', resp: error.message+" "+"models" }); // Send error message to the content script
+    if (error.name === 'AbortError') {
+     
+      port.postMessage({ type: 'ERROR', resp: "The request has been aborted." });
+    } else {
+
+      port.postMessage({ type: 'ERROR', resp: 'Failed to post request ' + ollama_host + ' '});
+
+    }
+    // Send error message to the content script
   }
 }
 
