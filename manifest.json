@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Orian (Ollama WebUI)",
-  "version": "1.0",
+  "version": "1.2",
   "description": "Quick access to your favorite local LLM from your browser (Ollama).",
   "icons": {
     "16": "assets/logo.png",
@@ -22,7 +22,6 @@
     "sidePanel",
     "contextMenus",
     "declarativeNetRequest",
-    "activeTab",
     "system.cpu",
     "system.memory",
     "commands"
@@ -33,9 +32,7 @@
   },
   "host_permissions": [
     "http://localhost:11434/api/tags",
-    "http://localhost:11434/api/generate",
-    "https://localhost:11434/api/tags",
-    "https://localhost:11434/api/generate"
+    "http://localhost:11434/api/generate"
   ],
   "side_panel": {
     "default_path": "panel.html",

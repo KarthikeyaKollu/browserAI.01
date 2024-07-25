@@ -5,16 +5,13 @@ chrome.runtime.onConnect.addListener(function(port) {
   port.onMessage.addListener(function(msg) {
     // Check the type of message received
     if (msg.type === 'SEARCH') {
-      console.log(msg); // Log the incoming message
       getResponseFromLLM(msg.query, port); // Call function to get response from LLM
-      console.log(msg.query); // Log the query
     }
 
     // If the message type is 'STOP', abort the ongoing request
     if (msg.type === "STOP") {
       controller.abort(); // Abort the current fetch
       controller = new AbortController(); // Reset the controller
-      console.log(controller.signal); // Log the new controller signal
     }
 
     // If the message type is 'SUGGESTREPLY', process the query
@@ -35,13 +32,11 @@ async function getModelFromStorage() {
   });
 }
 
-
+const ollama_host = 'http://localhost:11434';
 // Function to get response from Language Learning Model (LLM)
 async function getResponseFromLLM(query, port) {
 
-
 const selectedModel = await getModelFromStorage();
- console.log(selectedModel)
   const data = { model: selectedModel, prompt: query }; // Data to send to the LLM
   let d = ''; // Variable to store the accumulated response
   port.postMessage({type: 'MODEL',model:selectedModel})
@@ -50,7 +45,7 @@ const selectedModel = await getModelFromStorage();
     await getResponse(response, parsedResponse => {
       const word = parsedResponse.response;
       if (word !== undefined) {
-        console.log(word);
+
         d += word; // Accumulate the response
         port.postMessage({ type: 'WORD', resp: word })
 
@@ -60,7 +55,6 @@ const selectedModel = await getModelFromStorage();
 
     port.postMessage({ type: 'FINISHED', resp: d }); // Indicate that processing is finished
   } catch (error) {
-    console.log(error.message); // Log any errors
     if (error.name === 'AbortError') {
      
       port.postMessage({ type: 'ERROR', resp: "The request has been aborted." });
@@ -75,7 +69,7 @@ const selectedModel = await getModelFromStorage();
 
 // Function to send a POST request to the LLM API
 async function postRequest(data) {
-  const ollama_host = 'http://localhost:11434'; // Local server URL
+   // Local server URL
   const URL = `${ollama_host}/api/generate`; // API endpoint
 
   try {

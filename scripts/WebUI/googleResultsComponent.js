@@ -19,13 +19,11 @@ function google(){
   const computedStyles = window.getComputedStyle(bodyElement);
   
   // Log the current box-sizing property value
-  console.log("box-sizing:", computedStyles.getPropertyValue("box-sizing"));
   
   // Set the box-sizing property value to content-box
   bodyElement.style.boxSizing = "content-box";
   
   // Verify the change
-  console.log("Updated box-sizing:", bodyElement.style.boxSizing);
   
   
   async function googleSearchComponent() {
@@ -110,7 +108,6 @@ function google(){
     if (!doc) {
       const class_rhs = document.querySelector('.GyAeWb');
       newContentDiv.classList.add('ml-16');
-      console.log(class_rhs);
       // If #rhs is empty, directly append the content to the container
       class_rhs.appendChild(newContentDiv);
       return;
@@ -159,12 +156,10 @@ function google(){
     \`\`\`
     `
     }
-    console.log("loaded....")
     const alertDiv = document.getElementById('alert-1');
     const closeButton = alertDiv.querySelector('#closeButton');
     closeButton.addEventListener('click', function () {
       alertDiv.classList.remove('hidden')
-      console.log("close button is clicked")
   
       alertDiv.classList.add('-translate-y-full');
       setTimeout(() => {
@@ -195,7 +190,6 @@ function google(){
       }
       if (response.type === 'WORD') {
   
-        console.log("Received from background:", response);
         data_p += response.resp;
         let htmlContent = marked.parse(data_p);
         container.innerHTML = htmlContent;
@@ -209,7 +203,6 @@ function google(){
          
         // const parsedContent = marked.parse(response.resp);
         
-        // console.log(parsedContent);
         // container.innerHTML = parsedContent;
         container.classList.add('shine','overflow-hidden','fade-in')
   
@@ -218,7 +211,6 @@ function google(){
         document.getElementById('reload-button').classList.remove('hidden');
   
         await delay(700)
-        console.log(document.querySelectorAll('pre'))
         bodyElement.style.boxSizing = "content-box";
         console.log("box-sizing:", computedStyles.getPropertyValue("box-sizing"));
        }
@@ -250,7 +242,6 @@ function google(){
       if (node.nodeType === Node.ELEMENT_NODE) {
         // Select <pre> elements, excluding those with the class 'content-div'
         const preElements = node.matches('pre') ? [node] : node.querySelectorAll('pre');
-        console.log(preElements)
         preElements.forEach(pre => {
           // Check if the <pre> element is within a '.container-search' div
           if (pre.closest('.container-search')) {
@@ -338,7 +329,6 @@ function google(){
    */
   function showAlert(message) {
     const alertDiv = document.querySelector('#alert-1');  // Select the alert container
-    console.log(alertDiv);
     
     alertDiv.querySelector('.alert-message').textContent = message;  // Set the message content
     alertDiv.classList.remove('hidden', '-translate-y-full');  // Show the alert
@@ -367,7 +357,6 @@ function google(){
     btn.addEventListener('click',async  () => {
       // Send message to open the side panel
       chrome.runtime.sendMessage({ action: 'openSidePanel' });
-      console.log("command sent to open panel");
       await delay(1000)
   
       // Check if button text does not include 'New'/ StartNewchat

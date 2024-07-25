@@ -19,12 +19,8 @@ document.addEventListener('mouseup', (event) => {
   // If selected text is not empty, send it to the Chrome extension
   if (selectedText) {
     chrome.runtime.sendMessage({ type: 'TEXT_SELECTED', text: selectedText });
-    console.log(selectedText); // Log selected text to console for debugging
   }
 });
-
-
-
 
 
 /**
@@ -40,8 +36,6 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   if (request.action === "getText") {
     // Retrieve the inner text content of the document body
     var textContent = document.body.innerText.trim();
-    console.log(textContent); // Log the retrieved text content to the console for debugging
-
     // Send the text content back to the PanelUI as a response
     sendResponse({ textContent: textContent }); 
   }

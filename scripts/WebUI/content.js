@@ -34,18 +34,14 @@ async function addLinkedinPostComponent() {
 
   await delay(2000)
   const isPostClicked = document.querySelector('.artdeco-button.artdeco-button--muted.artdeco-button--4.artdeco-button--tertiary.ember-view.share-box-feed-entry__trigger');
-  console.log(isPostClicked)
 
   isPostClicked.addEventListener('click', async () => {
     //linkedIN artdeco-carousel__content tools , para ql-editor
-    console.log("isPostClicked")
     await delay(2000)
     const addComponent = document.querySelector('.share-creation-state__footer')
-    console.log(addComponent)
     if (addComponent) {
 
       addComponent.innerHTML += content
-      console.log("added to posts")
       suggestPostForLinkedin()
 
     }
@@ -69,18 +65,15 @@ async function suggestPostForLinkedin() {
 
 
   await delay(1000);
-  console.log("done delay")
   const context_div = document.querySelector('.editor-content.ql-container p')
   const context_post = context_div.textContent.toString()
-  console.log(context_post)
 
   let prompt = '';
-  console.log(replies)
+
 
   replies.forEach(btn => {
     btn.addEventListener('click', () => {
       prompt = btn.dataset.prompt;
-      console.log(prompt)
       if (btn.textContent.includes("Create")) {
         generateReply.classList.add('fade-out');
 
@@ -94,7 +87,6 @@ async function suggestPostForLinkedin() {
         }, 500);
       } else {
 
-        console.log(prompt);
         const fullPrompt = `You are a helpful assistant. Your task is to rewrite the provided LinkedIn post to improve its clarity, professionalism, and engagement. Ensure the rewritten post is appropriate for a professional audience and encourages interaction.
 
         Please rewrite the following LinkedIn post:
@@ -159,7 +151,6 @@ Context: ${prompt}
       
       `
       sendDataToBackgroundLinkedInPost(fullPrompt)
-      console.log(prompt)
     });
 
 
@@ -187,12 +178,8 @@ async function sendDataToBackgroundLinkedInPost(fullPrompt) {
   document.querySelector('.editor-content.ql-container p').textContent = " ";
 
   const context_post = context.textContent.toString()
-  console.log(context)
 
 
-
-  // await delay(1000);
-  // console.log("delay done")
 
 
   if (context) {
@@ -205,18 +192,14 @@ async function sendDataToBackgroundLinkedInPost(fullPrompt) {
         `
     await delay(1000);
     const loading = document.querySelector(".loading1");
-    console.log(loading)
 
     //Listening for messages from background script
     port.onMessage.addListener(function (response) {
       if (response.type === 'WORD') {
-        console.log("Received from background:", response);
-        console.log(response.resp)
         loading.classList.add('hidden')
         document.querySelector('.editor-content.ql-container p').textContent += response.resp
 
       } else if (response.type === 'FINISHED') {
-        console.log(response)
         document.querySelector('.editor-content.ql-container p').innerHTML = " "
         const parsedcontent = marked.parse(response.resp)
         document.querySelector('.editor-content.ql-container p').textContent = response.resp
@@ -225,13 +208,9 @@ async function sendDataToBackgroundLinkedInPost(fullPrompt) {
       }
     });
 
-    console.log("done adding the context")
 
   }
-  else {
-    console.error("No message div is found")
-  }
-
+  
 
   // Start the search with the given query
   port.postMessage({ type: 'SUGGESTREPLY', query: fullPrompt });
@@ -251,14 +230,12 @@ function getCurrentUrl() {
 }
 // Initial URL capture
 var currentUrl = getCurrentUrl();
-console.log("Initial URL:", currentUrl);
 onDocumentReady(currentUrl)
 
 // Function to handle URL changes
 function handleUrlChange() {
   var newUrl = getCurrentUrl();
   if (newUrl !== currentUrl) {
-    console.log("URL changed. New URL:", newUrl);
     currentUrl = newUrl;
     onDocumentReady(newUrl)
 
@@ -307,40 +284,10 @@ function onDocumentReady(currentTabUrl) {
 
 }
 
-// styling for prism
 
 
 
 
 
-// content.js
-
-// // Listen for messages from the background script
-// chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
-//   if (request.action === "getText") {
-//     var images = document.getElementsByTagName('img');
-//     for (var i = images.length - 1; i >= 0; i--) {
-//       images[i].parentNode.removeChild(images[i]);
-//     }
-
-//     // Remove headers
-//     var headers = document.querySelectorAll('header');
-//     headers.forEach(function (header) {
-//       header.parentNode.removeChild(header);
-//     });
-
-//     // Remove footers
-//     var footers = document.querySelectorAll('footer');
-//     footers.forEach(function (footer) {
-//       footer.parentNode.removeChild(footer);
-//     });
-//     var textContent = document.body.innerText;
-//     console.log(textContent)
-
-//     // Send the text content back to the background script
-//     sendResponse({ textContent: textContent });
-//   }
-
-// });
 
 

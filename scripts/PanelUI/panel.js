@@ -94,7 +94,6 @@ async function postRequest(data) {
   }
 }
 
-
 // API Function to stream the response from the server
 async function getResponse(response, callback) {
   const reader = response.body.getReader();
@@ -145,6 +144,7 @@ updates the query parameters of page url to include model name
     const newPathWithQuery = `${window.location.pathname}?${searchParams.toString()}`
     window.history.replaceState(null, '', newPathWithQuery);
   }
+
   chrome.storage.local.set({ 'model': model }, async () => {
     console.log('Model updated manually to ' + model);
     const selectedModel = document.getElementById('model-select')
@@ -158,6 +158,9 @@ updates the query parameters of page url to include model name
 
 }
 
+
+
+
 // Fetch available models and populate the dropdown
 async function populateModels() {
 
@@ -167,6 +170,7 @@ async function populateModels() {
 
 
     const selectElement = document.getElementById('model-select');
+    
 
 
     // set up handler for selection
@@ -181,18 +185,15 @@ async function populateModels() {
       selectElement.appendChild(option);
     });
 
-
-
-    //  // In popup.js
-    // chrome.storage.local.set({ 'model': selectElement.value }, function() {
-    //   if (chrome.runtime.lastError) {
-    //     console.error('Error setting model: ' + chrome.runtime.lastError.message);
-    //   } else {
-    //     console.log('Model updated manually to ' + selectElement.value);
-    //   }
+   
+    // chrome.storage.local.set({ 'model': selectElement.value }, async () => {
+    //   console.log('Model updated manually to ' + selectElement.value);
+    //   selectElement.parentElement.classList.add("shine","overflow-hidden");
+    //   await delay(800)
+    //   selectElement.parentElement.classList.remove("shine","overflow-hidden");
+      
     // });
-
-
+    
 
 
 
@@ -271,7 +272,7 @@ async function submitRequest() {
 
   if (!context_prompt.classList.contains('hidden')) {
     context_prompt.classList.add('hidden')
-    closeButton.classList.add('hidden')
+    // closeButton.classList.add('hidden')
   }
 
 
@@ -282,7 +283,6 @@ async function submitRequest() {
   const selectedModel = document.getElementById('model-select').value;
   const chatlog = document.getElementById('chatlog');
   const loading = document.getElementById('loading');
-  console.log(docContent)
   const basicPrompt = buildPrompt(contextInput, input, docContent);
 
   conversationHistory += `\nUSER: ${basicPrompt}\n`;
@@ -303,7 +303,7 @@ async function submitRequest() {
         ## Instructions:
         As USER in the conversation above, your task is to continue the conversation. Remember, your responses should be crafted as if you're a human conversing in a natural, realistic manner, keeping in mind the context and flow of the dialogue. Please generate a fitting response to the last message in the conversation, or if there is no existing conversation, initiate one as a normal person would.
 
-        ## YourResponse:
+        ## Response:
             `
 
   updateChatlog(chatlog, contextInput, input);
@@ -332,21 +332,20 @@ docContent=""
   context_prompt.value = '';
 
 
-  const Model = await getModelFromStorage()
+  var Model = await getModelFromStorage()
 
 
 
 
 
-  if (!Model) {
-    Model = selectedModel
+  // if (!Model) {
+  //   Model = selectedModel
     
-  }
+  // }
 
   if (isDocument) {
     const removeDoc = document.querySelector('.document-container .remove-doc');
     removeDoc.click()
-    console.log("remove doc is  triggereed")
   }
 
 
@@ -440,7 +439,6 @@ async function readPDF(file) {
       });
     }
 
-    // console.log(textContent)
     handleDoc(textContent,file.name)
 
   
@@ -491,7 +489,6 @@ function handleDoc(textContent,filename){
    //if(!docContent.length > 0){ addButton.click(); console.log("unwanted triggres")}
     const removeDoc = document.querySelector('.remove-doc');
     removeDoc.addEventListener('click',()=>{
-      console.log("clicked close button")
       docContainer.innerHTML =""
       isDocument = false
       docContent=""
@@ -503,15 +500,15 @@ let isRegenerate = false
 
 
 
-// Add event listener to the button to trigger the context function
-document.querySelector('.input-context-li').addEventListener('click', () => {
-  addButton.click()
-});
+
 document.querySelector('.webchat-li').addEventListener('click', () => {
   document.querySelector('.webchat-suggestion').click()
   addButton.click()
 
 });
+
+
+
 document.querySelector('.settings-li').addEventListener('click', () => {
   window.open(chrome.runtime.getURL('options.html'));
   addButton.click()
@@ -522,24 +519,52 @@ document.querySelector('.settings-li').addEventListener('click', () => {
 
 
 
-const addButton = document.querySelector('#toggleButton-list img')
+const addButton = document.querySelector('#toggleButton-list img');
+const uploadList = document.getElementById('uploadList');
+const listItems = uploadList.querySelectorAll('li'); // Assuming the list items are <li> elements
+
 addButton.addEventListener('click', function (event) {
+  event.stopPropagation(); // Prevent the click event from propagating to the document
+  toggleUploadList();
+});
 
-  var uploadList = document.getElementById('uploadList');
-  if (uploadList.classList.contains('hidden')) {
-    uploadList.classList.remove('hidden');
-    uploadList.classList.add('fade-in');
-
-    addButton.src = "https://img.icons8.com/?size=100&id=46&format=png&color=FFFFFF"
-
-  } else {
-    uploadList.classList.add('hidden');
-    uploadList.classList.remove('fade-in');
-    addButton.src = "https://img.icons8.com/?size=100&id=3220&format=png&color=FFFFFF"
-
+document.addEventListener('click', function (event) {
+  // Check if the click was outside the uploadList and addButton
+  if (!uploadList.contains(event.target) && !addButton.contains(event.target)) {
+    closeUploadList();
   }
 });
 
+listItems.forEach(item => {
+  item.addEventListener('click', function (event) {
+    event.stopPropagation(); // Prevent the click event from propagating to the document
+    closeUploadList();
+  });
+});
+
+function toggleUploadList() {
+  if (uploadList.classList.contains('hidden')) {
+    uploadList.classList.remove('hidden', 'fade-out');
+    uploadList.classList.add('fade-in');
+    addButton.src = "https://img.icons8.com/?size=100&id=46&format=png&color=FFFFFF";
+  } else {
+    uploadList.classList.remove('fade-in');
+    uploadList.classList.add('fade-out');
+    addButton.src = "https://img.icons8.com/?size=100&id=3220&format=png&color=FFFFFF";
+    setTimeout(() => {
+      uploadList.classList.add('hidden');
+    }, 500); // Match the duration of your fade-out animation
+  }
+}
+
+
+function closeUploadList() {
+  if (!uploadList.classList.contains('hidden')) {
+    uploadList.classList.add('hidden');
+    uploadList.classList.remove('fade-in');
+    addButton.src = "https://img.icons8.com/?size=100&id=3220&format=png&color=FFFFFF";
+  }
+}
 
 
 let doc=""
@@ -604,8 +629,8 @@ function updateChatlog(chatlog, contextInput, input) {
 
           </button>
         </div>
-        <div class="max-w-[90%] m-2 p-2 bg-[#009afd]   rounded-bl-lg rounded-tr-lg rounded-tl-lg mb-4 fade-in">
-          <div class="w-full mx-auto min-h-20 px-3 py-2 rounded-md bg-black text-white resize-none border overflow-auto max-h-40 glow mb-2" >
+        <div class="max-w-[90%] m-2 p-3 pb-2 bg-gradient-to-r from-fuchsia-500 to-cyan-500 font-mediumtext-left text-white font-medium  rounded-bl-lg rounded-tr-lg rounded-tl-lg mb-4 fade-in">
+          <div class="w-full mx-auto min-h-20 px-3 py-2 rounded-md bg-black text-white resize-none border overflow-auto max-h-40 glow mb-2"  >
             ${contextInput.toString().replace(/&/g, "&amp;")
               .replace(/</g, "&lt;")
               .replace(/>/g, "&gt;")
@@ -637,7 +662,7 @@ function updateChatlog(chatlog, contextInput, input) {
       </div>
   
     
-      <div type="text" id="prompt" placeholder="Ask a follow-up" class="fade-in bg-[#009afd] text-left  p-2 px-4 test-white rounded-bl-lg text-white rounded-tr-lg text-lg rounded-tl-lg max-w-[90%] m-1  relative group">
+      <div type="text" id="prompt" placeholder="Ask a follow-up" class="fade-in  bg-gradient-to-r from-fuchsia-500 to-cyan-500 font-mediumtext-left text-white font-medium text-left  p-2 px-4 test-white rounded-bl-lg rounded-tr-lg text-lg rounded-tl-lg max-w-[90%] m-1  relative group" >
           ${input}
   <div class="absolute top-0 -left-10">
     <button class="edit-button">
@@ -668,7 +693,7 @@ function updateChatlog(chatlog, contextInput, input) {
         </button>
 
 
-        <p type="text" id="prompt" placeholder="Ask a follow-up" class="fade-in bg-[#009afd] text-left  p-2 px-4 test-white rounded-bl-lg text-white rounded-tr-lg text-lg rounded-tl-lg max-w-[90%] m-1 overflow-hidden">
+        <p type="text" id="prompt" placeholder="Ask a follow-up" class="fade-in bg-gradient-to-r from-fuchsia-500 to-cyan-500 font-mediumtext-left text-white p-2 px-4 test-white rounded-bl-lg rounded-tr-lg text-lg rounded-tl-lg max-w-[90%] m-1 overflow-hidden" >
           ${input}
         </p>
 
@@ -679,7 +704,6 @@ function updateChatlog(chatlog, contextInput, input) {
  
   countForEditing += 2;
   chatlog.appendChild(chatEntry);
-  console.log("New elemtn id", countForEditing)
   const cancelEdit = chatEntry.querySelector('.cancel-edit')
   const edit = chatEntry.querySelector('.edit-button')
   let name = fileName
@@ -691,22 +715,19 @@ function updateChatlog(chatlog, contextInput, input) {
     isEditing = true
     promptInput.value = input
     if (contextInput.length > 0) {
-      console.log("Editing with contex")
       context_prompt.classList.remove('hidden');
       context_prompt.value = contextInput
-      closeButton.classList.remove('hidden')
+      // closeButton.classList.remove('hidden')
 
     } else if(chatEntry.classList.contains('doc')){
       // doc = new File([doc], `${ fileName } `, { type: 'application/pdf' });
       triggerFileInputChange(doc);
-      console.log("Contains doc class")
       
     }
 
 
     parentElementID = event.target.parentElement.parentElement.id
     parentElementID = chatEntry.querySelector('.countForEditing').id
-    console.log(parentElementID)
     sibling = chatEntry.nextElementSibling;
     // Clear chatlog visually after editing
     while (sibling) {
@@ -724,16 +745,19 @@ function updateChatlog(chatlog, contextInput, input) {
     edit.querySelector('img').classList.add('group-hover:flex')
     cancelEdit.querySelector('img').classList.add('hidden')
     event.target.parentElement.parentElement.parentElement.classList.remove('bg-blue-500', 'bg-opacity-50', "rounded-lg")
+
     promptInput.value = ""
     if (contextInput.length > 0) {
-      console.log("Editing with contex")
       context_prompt.classList.add('hidden');
       context_prompt.value = ""
-      closeButton.classList.add('hidden')
+      // closeButton.classList.add('hidden')
 
     }
-     else {
-      console.log("Not with context")
+     else if(chatEntry.classList.contains('doc')){
+      // doc = new File([doc], `${ fileName } `, { type: 'application/pdf' });
+      const removeDoc = document.querySelector('.document-container .remove-doc');
+    removeDoc.click()
+      
     }
     countForEditing = parseInt(parentElementID, 10)
     toIndex = 0
@@ -768,7 +792,6 @@ async function deleteFromIndex(s, e, sibling) {
  
 
   let elementToRemove = document.getElementById(`${s}`);//parent elemtn
-  console.log(elementToRemove , s )
   if (elementToRemove) {
     elementToRemove.parentNode.removeChild(elementToRemove);
   } else {
@@ -790,10 +813,8 @@ async function deleteFromIndex(s, e, sibling) {
 function removeElements(array, index, count) {
   // Check if index is within valid range
   if (index < 0 || index >= array.length) {
-    console.error('Invalid index provided.');
     return;
   }
-  console.log(parentElementID, " ", count)
   // Remove 'count' elements starting from 'index'
   array.splice(parentElementID, count + 1);
   messages = array
@@ -862,16 +883,13 @@ function createChatResponseElement(chatlog) {
   // Event handler for regenerate button
 async function handleRegenerate(event) {
     // Handle cancel edit button click
-    console.log('regenrate clicked Edit clicked!');
     isRegenerate = true
     const actualElement = event.target.parentElement.parentElement.parentElement.parentElement;
 
-    console.log(actualElement)
     
     const prevElement = actualElement.previousElementSibling
     const btn = prevElement.querySelector('.edit-button')
-    console.log(btn)
-    console.log(ongoing)
+
     if(!ongoing){
       btn.click()
      await delay(200)
@@ -913,7 +931,7 @@ async function processResponse(response, chatlog, chatResponse, loading, chatRes
   loading.classList.remove('flex');
   chatResponse_div.classList.remove('hidden'); // Show response after processing
 });
-console.log("done generating..........")
+
 conversationHistory += `\nSYSTEM: ${data_p}\n`;
 messages.push({ role: 'SYSYTEM', content: data_p });
 document.getElementById('stop-button').classList.add('hidden'); // Hide the stop button after the request completes
@@ -931,7 +949,7 @@ ongoing = false
 addContextButton.addEventListener('click', () => {
   if (context_prompt.classList.contains('hidden')) {
     context_prompt.classList.remove('hidden')
-    closeButton.classList.remove('hidden')
+    // closeButton.classList.remove('hidden')
   }
 })
 submitButton.addEventListener('click', async () => {
@@ -939,20 +957,28 @@ submitButton.addEventListener('click', async () => {
 });
 // Scroll to bottom of chat log when Enter key is pressed
 promptInput.addEventListener('keydown', function (event) {
+  if (event.key === 'Enter' && event.shiftKey) {
+    // Allow default behavior for Shift+Enter (new line)
+    return;
+  }
+  
   if (event.key === 'Enter') {
     event.preventDefault(); // Prevent the default newline behavior
 
     // Your existing logic for submitting the chat message goes here
-    submitRequest()
+    submitRequest();
+    
     // Scroll to the bottom of the chat log
     var chatLog = document.getElementById('chatlog');
     chatLog.scrollTop = chatLog.scrollHeight;
   }
 });
+
+
 closeButton.addEventListener('click', async () => {
   context_prompt.classList.add('hidden')
   context_prompt.value = ''
-  closeButton.classList.add('hidden')
+  // closeButton.classList.add('hidden')
 });
 
 document.getElementById('stop-button').addEventListener('click', () => {
@@ -966,7 +992,6 @@ document.getElementById('stop-button').addEventListener('click', () => {
   const chatResponse_div = document.querySelectorAll('.chatResponse')
   const chatResponse = document.querySelector('.chatResponse')
   chatResponse.querySelector('.menu-group').classList.add('group-hover:flex')
-  // console.log(response_llm[response_llm.length -1])
   let currResp = chatResponse_div[chatResponse_div.length - 1]
 
   currResp.classList.remove('glow')
@@ -1065,12 +1090,10 @@ const suggestions = document.querySelectorAll('.suggestions');
 suggestions.forEach(suggestion => {
   suggestion.addEventListener('click', () => {
     if (suggestion.textContent.includes("webpage")) {
-      console.log("clicked chat with website")
       chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
         // Send a message to the content script
         chrome.tabs.sendMessage(tabs[0].id, { action: "getText" }, function (response) {
           if (chrome.runtime.lastError) {
-            console.error(chrome.runtime.lastError);
             showAlert("This Feature is not supported or Reload the webpage ")
           } else {
             // //promptInput.value = response.textContent;
@@ -1136,15 +1159,14 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 
     context_prompt.classList.remove('hidden');
     context_prompt.value = message.text.toString();
-    closeButton.classList.remove('hidden')
+    // closeButton.classList.remove('hidden')
   }
   if (message.type === "FOLLOWUP") {
 
 
     context_prompt.classList.remove('hidden');
     context_prompt.value = message.text;
-    closeButton.classList.remove('hidden')
-    console.log("loaded")
+    // closeButton.classList.remove('hidden')
 
 
 

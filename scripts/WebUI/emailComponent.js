@@ -43,8 +43,6 @@ function email() {
         div.className = "alertdiv"
         div.innerHTML = content
         document.body.appendChild(div);
-        // const alertDiv = document.querySelector('');
-        // console.log(alertDiv)
         waitForElement('#alert-1', (alertDiv) => {
 
             alertDiv.querySelector('.alert-message').textContent = message;
@@ -78,7 +76,6 @@ function email() {
           
       </div>`;
 
-        console.log(reply);
         const checkReplyComponent = reply.querySelector('.generate-reply-container');
         if (!checkReplyComponent) {
             reply.insertAdjacentHTML('afterbegin', con);
@@ -90,7 +87,6 @@ function email() {
             }
 
             const replies = document.querySelectorAll(".reply-reply");
-            console.log(replies);
             const clickSimulate = document.querySelector('.ams.bkH');
             replies.forEach(btn => {
                 btn.addEventListener('click', () => {
@@ -191,7 +187,6 @@ function email() {
         await delay(2000); // Delay for loading
         const context_email_div = d.querySelector('.Am.aiL.Al.editable.LW-avf.tS-tW');
 
-        console.log(context_email_div);
         const toggleButton = d.querySelector('#toggleButton');
 
         let prompt = '';
@@ -226,7 +221,6 @@ function email() {
 
                         sendDataToBackgroundCompose(fullPrompt, d);
                     } else {
-                        console.log("it is empyty calling the alert ")
                         showAlert("The email body is blank and cannot be rewritten.")
                     }
 
@@ -342,7 +336,6 @@ ${prompt}
 
     // Function to send data to the background script for processing
     async function sendDataToBackgroundCompose(query, d) {
-        console.log(query);
         
 
         const port = chrome.runtime.connect({ name: 'ollama_port' });
@@ -352,7 +345,6 @@ ${prompt}
             if (d === "") {
                 const toggleButton = document.querySelector('#toggleButton');
                 toggleButton.click();
-                console.log('in d="empty');
             } else {
                 message = d.querySelector('.Am.aiL.Al.editable.LW-avf.tS-tW');
                 const toggleButton = d.querySelector('#toggleButton');
@@ -388,7 +380,6 @@ ${prompt}
                 port.onMessage.addListener(function (response) {
                     
                     if (response.type === 'WORD') {
-                        console.log("Received from background:", response);
                         // loading.classList.add('fade-out');
                         // loading.classList.remove('fade-in');
 
@@ -403,21 +394,10 @@ ${prompt}
                     if (response.type === "ERROR") {
                         showAlert(response.resp)
                         message.textContent = ""
-                        console.log("error is occured while send it")
 
 
                     }
-                 
-
-                    // document.getElementById('stop-button').addEventListener('click', () => {
-                    //     // Abort the ongoing request
-
-
-                    //     loading.classList.add('hidden')
-
-                    //     port.postMessage({ type: 'STOP' });
-                    // });
-
+                
 
 
                 });
@@ -448,16 +428,13 @@ ${prompt}
             addReply(reply); // Adds reply functionality above the reply and forward buttons of Gmail reply
         });
 
-        console.log(data);
 
         // Loop through each email element
         data.forEach((d, i) => {
             if (!d.querySelector('.my-extension')) {
                 // If compose component is not already present, add it
                 addEmailComposeComponent(d);
-            } else {
-                console.log("already there at ", i);
-            }
+            } 
         });
     }
 
