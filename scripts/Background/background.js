@@ -1,5 +1,4 @@
 import "./models.mjs"; // Importing the models module for LLM interactions
-
 // Log to indicate the extension has started
 chrome.runtime.onInstalled.addListener(() => {
   console.log("installed");
@@ -51,5 +50,9 @@ chrome.commands.onCommand.addListener((command) => {
 chrome.sidePanel.setPanelBehavior({ openPanelOnActionClick: true })
   .then(() => console.log('Side panel behavior set successfully.')) // Success message
   .catch(error => console.error('Error setting side panel behavior:', error)); // Error handling
+
+
+
+
 
 

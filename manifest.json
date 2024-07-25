@@ -31,8 +31,8 @@
     "type": "module"
   },
   "host_permissions": [
-    "http://localhost:11434/api/tags",
-    "http://localhost:11434/api/generate"
+    "http://localhost:11434/api/generate",
+    "http://localhost:11434/api/tags"
   ],
   "side_panel": {
     "default_path": "panel.html",

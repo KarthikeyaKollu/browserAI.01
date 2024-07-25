@@ -683,10 +683,6 @@ video {
   top: -0.5rem;
 }
 
-.-top-28 {
-  top: -7rem;
-}
-
 .-top-6 {
   top: -1.5rem;
 }
@@ -749,6 +745,26 @@ video {
 
 .top-4 {
   top: 1rem;
+}
+
+.top-11 {
+  top: 2.75rem;
+}
+
+.-top-11 {
+  top: -2.75rem;
+}
+
+.-top-28 {
+  top: -7rem;
+}
+
+.-top-3 {
+  top: -0.75rem;
+}
+
+.-top-32 {
+  top: -8rem;
 }
 
 .isolate {
@@ -1104,10 +1120,6 @@ video {
   width: 2.5rem;
 }
 
-.w-11\/12 {
-  width: 91.666667%;
-}
-
 .w-16 {
   width: 4rem;
 }
@@ -1124,8 +1136,8 @@ video {
   width: 1rem;
 }
 
-.w-44 {
-  width: 11rem;
+.w-40 {
+  width: 10rem;
 }
 
 .w-5 {
@@ -1190,18 +1202,6 @@ video {
 
 .w-full {
   width: 100%;
-}
-
-.w-14 {
-  width: 3.5rem;
-}
-
-.w-12 {
-  width: 3rem;
-}
-
-.w-40 {
-  width: 10rem;
 }
 
 .max-w-2xl {
@@ -2674,10 +2674,6 @@ video {
   padding-top: 0.5rem;
 }
 
-.pl-2 {
-  padding-left: 0.5rem;
-}
-
 .text-left {
   text-align: left;
 }
@@ -2764,22 +2760,6 @@ video {
 .text-xs {
   font-size: 0.75rem;
   line-height: 1rem;
-}
-
-.text-\[0\.5rem\] {
-  font-size: 0.5rem;
-}
-
-.text-\[0\.56em\] {
-  font-size: 0.56em;
-}
-
-.text-\[0\.6em\] {
-  font-size: 0.6em;
-}
-
-.text-\[0\.6rem\] {
-  font-size: 0.6rem;
 }
 
 .font-bold {
@@ -2908,10 +2888,6 @@ video {
 .text-yellow-500 {
   --tw-text-opacity: 1;
   color: rgb(234 179 8 / var(--tw-text-opacity));
-}
-
-.text-\[\] {
-  color: ;
 }
 
 .underline {
@@ -3697,12 +3673,16 @@ video {
     width: 2.5rem;
   }
 
+  .sm\:w-11\/12 {
+    width: 91.666667%;
+  }
+
   .sm\:w-20 {
     width: 5rem;
   }
 
-  .sm\:w-3\/4 {
-    width: 75%;
+  .sm\:w-44 {
+    width: 11rem;
   }
 
   .sm\:w-\[30\%\] {
@@ -3711,18 +3691,6 @@ video {
 
   .sm\:w-\[35\%\] {
     width: 35%;
-  }
-
-  .sm\:w-1 {
-    width: 0.25rem;
-  }
-
-  .sm\:w-11\/12 {
-    width: 91.666667%;
-  }
-
-  .sm\:w-44 {
-    width: 11rem;
   }
 
   .sm\:text-2xl {
@@ -3736,12 +3704,12 @@ video {
 }
 
 @media (min-width: 768px) {
-  .md\:w-1\/2 {
-    width: 50%;
-  }
-
   .md\:w-24 {
     width: 6rem;
+  }
+
+  .md\:w-3\/4 {
+    width: 75%;
   }
 
   .md\:w-36 {
@@ -3751,25 +3719,9 @@ video {
   .md\:w-\[30\%\] {
     width: 30%;
   }
-
-  .md\:w-2 {
-    width: 0.5rem;
-  }
-
-  .md\:w-20 {
-    width: 5rem;
-  }
-
-  .md\:w-3\/4 {
-    width: 75%;
-  }
 }
 
 @media (min-width: 1024px) {
-  .lg\:w-1\/3 {
-    width: 33.333333%;
-  }
-
   .lg\:w-1\/2 {
     width: 50%;
   }

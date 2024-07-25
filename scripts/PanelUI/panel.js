@@ -655,7 +655,7 @@ function updateChatlog(chatlog, contextInput, input) {
         <div class="flex items-center justify-center p-2">
             <img src="https://img.icons8.com/ios-glyphs/30/ffffff/document--v1.png" alt="Document Icon" class="mr-4 bg-red-500 rounded-lg p-3">
             <div>
-                <p class="text-white font-bold">${fileName}</p>
+                <span class="text-white font-bold truncate">${fileName}</span>
                 <p class="text-white opacity-75">Document</p>
             </div>
         </div>

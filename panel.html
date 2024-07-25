@@ -47,11 +47,11 @@
     </div>
     <div class="text-white group space-y-2 cursor-pointer">
         <div class="usage border border-red-300 rounded-lg p-1 flex w-16 sm:w-20 md:w-24">
-            <span class="pl-1">CPU:</span> 
+            <span class="">CPU:</span> 
             <span class="mx-auto" id="cpuUsage">00.0</span>
         </div>
         <div class="usage border border-purple-500 rounded-lg p-1 flex w-16 sm:w-20 md:w-24">
-            <span class="pl-1">RAM:</span>
+            <span class="">RAM:</span>
             <span class="mx-auto" id="ramUsage">00.0</span>
         </div>
         <span class="absolute -bottom-8 fade-in -right-3 mb-1 hidden group-hover:flex items-center justify-center bg-gray-800 text-white text-xs rounded px-2 py-1">
@@ -134,7 +134,7 @@
                     <img src="https://img.icons8.com/?size=100&id=3220&format=png&color=FFFFFF" class="rounded-full" style="width:18px"/>
                 </div>
                 <!-- Hidden List -->
-                <div id="uploadList" class="hidden bg-[#2f2f2f] border border-gray-400 mt-4 absolute top-16 p-1 rounded-lg w-40 sm:w-44">
+                <div id="uploadList" class="hidden bg-[#2f2f2f] border border-gray-400 mt-4 -top-32 absolute  p-1 rounded-lg w-40 sm:w-44">
                     <ul class="p-0">
                         <li class="flex items-center p-1 px-3 mb-1 hover:bg-[#212121] rounded-lg input-context-li input-context-button">
                             <img src="https://img.icons8.com/?size=100&id=3220&format=png&color=FFFFFF" class="w-6 p-1 text-white rounded-lg" />
@@ -149,7 +149,7 @@
                                     Upload File
                                 </span>
                             </label>
-                            <input type="file" id="fileInput" accept=".txt, .pdf, .html, .js, .css, .java, .py, .cpp, .c, .cs, .php, .rb, .go, .rs, .swift, .ts, .xml, .json, .yaml, .yml" class="hidden">
+                            <input type="file" id="fileInput" accept=".txt, .pdf, .html, .js, .css, .java, .py, .cpp, .c, .cs, .php, .rb, .go, .rs, .swift, .ts, .xml, .json, .yaml, .yml, .db, .sql" class="hidden">
                         </li>
                         <li class="flex items-center px-3 p-1 mb-1 rounded-lg hover:bg-[#212121] webchat-li">
                             <img src="https://img.icons8.com/?size=100&id=aIYDmrSk6X13&format=png&color=000000" class="w-6 p-1 text-white rounded-lg" />
